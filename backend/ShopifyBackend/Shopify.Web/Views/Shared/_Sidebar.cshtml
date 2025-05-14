@@ -2,7 +2,7 @@
 @{
     var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
 }
-<section class="bg-emerald-600 w-[240px] border-r border-gray-300">
+<section class="bg-emerald-600 w-[240px] h-screen flex flex-col border-r border-gray-300">
    <a asp-action="Index" asp-controller="Home">
         <div class="flex items-center gap-1 py-3 justify-center bg-emerald-600">
             <img alt="Logo" src="/images/store.png" class="h-[30px] w-[30px]" />
@@ -10,7 +10,7 @@
         </div>
    </a>
     <div class="h-[1px] w-full bg-emerald-500"></div>
-    <div class="rounded-full text-white">
+    <div class="flex-grow overflow-y-auto text-white">
         <div>
             <ul id="sidebar-items">
                 <li>
@@ -32,7 +32,7 @@
                     </a>
                     <ul class="hidden bg-emerald-700 text-sm" id="employee-submenu">
                         <li>
-                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"><i class="ph ph-users text-lg"></i>List Employees</a>
+                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"><i class="ph ph-user-list text-lg"></i>List Employees</a>
                             <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-user-plus text-lg"></i>Add Employee</a>
                         </li>
                     </ul>
@@ -42,22 +42,99 @@
                        onclick="toggleSubmenu('product',this)"
                        class="block py-3.5 px-3 hover:bg-emerald-800 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2 justify-between pr-2">
                         <span class="flex items-center gap-2">
-                            <i class="ph ph-bag text-lg"></i>
+                            <i class="ph ph-storefront text-lg"></i>
                             Products
                         </span>
                         <i class='ph ph-caret-right'></i>
                     </a>
                     <ul class="hidden bg-emerald-700 text-sm" id="product-submenu">
                         <li>
-                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"><i class="ph ph-list text-lg"></i>List Products</a>
-                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-plus text-lg"></i>Add Product</a>
+                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"><i class="ph ph-list-numbers text-lg"></i>List Products</a>
+                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-plus-circle text-lg"></i>Add Product</a>
+                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-medal text-lg"></i>Brands</a>
+                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-folders text-lg"></i>Categories</a>
                         </li>                                                                                                                                                
                     </ul>
                 </li>
- 
+                <li>
+                    <a href="javascript:void(0)"
+                       onclick="toggleSubmenu('productimages',this)"
+                       class="block py-3.5 px-3 hover:bg-emerald-800 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2 justify-between pr-2">
+                        <span class="flex items-center gap-2">
+                            <i class="ph ph-images text-lg"></i>
+                            Product Images
+                        </span>
+                        <i class='ph ph-caret-right'></i>
+                    </a>
+                    <ul class="hidden bg-emerald-700 text-sm" id="productimages-submenu">
+                        <li>
+                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"><i class="ph ph-list text-lg"></i>List Products</a>
+                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-plus text-lg"></i>Add Product</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:void(0)"
+                       onclick="toggleSubmenu('orders',this)"
+                       class="block py-3.5 px-3 hover:bg-emerald-800 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2 justify-between pr-2">
+                        <span class="flex items-center gap-2">
+                            <i class="ph ph-package text-lg"></i>
+                            Orders
+                        </span>
+                        <i class='ph ph-caret-right'></i>
+                    </a>
+                    <ul class="hidden bg-emerald-700 text-sm" id="orders-submenu">
+                        <li>
+                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"><i class="ph ph-list text-lg"></i>List Products</a>
+                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-plus text-lg"></i>Add Product</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:void(0)"
+                       onclick="toggleSubmenu('coupons',this)"
+                       class="block py-3.5 px-3 hover:bg-emerald-800 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2 justify-between pr-2">
+                        <span class="flex items-center gap-2">
+                            <i class="ph ph-gift text-lg"></i>
+                            Coupons
+                        </span>
+                        <i class='ph ph-caret-right'></i>
+                    </a>
+                    <ul class="hidden bg-emerald-700 text-sm" id="coupons-submenu">
+                        <li>
+                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"><i class="ph ph-list text-lg"></i>List Products</a>
+                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-plus text-lg"></i>Add Product</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:void(0)"
+                       onclick="toggleSubmenu('settings',this)"
+                       class="block py-3.5 px-3 hover:bg-emerald-800 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2 justify-between pr-2">
+                        <span class="flex items-center gap-2">
+                            <i class="ph ph-gear text-lg"></i>
+                            Settings
+                        </span>
+                        <i class='ph ph-caret-right'></i>
+                    </a>
+                    <ul class="hidden bg-emerald-700 text-sm" id="settings-submenu">
+                        <li>
+                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"><i class="ph ph-info text-lg"></i>General Settings</a>
+                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-calculator text-lg"></i>Tax Settings</a>
+                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-envelope-simple text-lg"></i>Email Templates</a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>
+    <form asp-action="Logout" asp-controller="Auth" method="post" class="mt-auto shrink-0 border-t border-emerald-500 hover:bg-emerald-800 transition cursor-pointer">
+        @Html.AntiForgeryToken()
+        <button class="cursor-pointer flex items-center gap-2 text-white h-full w-full p-2" type="submit">
+            <i class="ph ph-sign-out text-lg"></i>
+            <span>Logout</span>
+        </button>
+    </form>
 </section>
 
 <script>
