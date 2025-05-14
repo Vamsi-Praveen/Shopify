@@ -74,6 +74,11 @@ _ReSharper*
 /artifacts
 *.dll  # Ignore DLL files
 
+backend/ShopifyBackend/Shopify.Web/appsettings.*.json
+backend/ShopifyBackend/Shopify.API/appsettings.*.json
+
+backend/ShopifyBackend/Shopify.Core/Migrations
+
 # NuGet
 ###################
 [Bb]in/

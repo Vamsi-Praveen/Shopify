@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using Shopify.Core.Data;
 
 namespace Shopify.API
 {
@@ -7,7 +9,11 @@ namespace Shopify.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            //Database Configuration
+            builder.Services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres"));
+            });
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

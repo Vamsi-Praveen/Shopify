@@ -1,0 +1,43 @@
+﻿@model Shopify.Web.Models.LoginModel
+@{
+    ViewData["Title"] = "Login - Admin";
+}
+
+<section class="h-screen w-screen flex flex-col gap-2 items-center justify-center bg-gray-100">
+   <div class="flex items-center justify-center gap-3 mb-4">
+        <img alt="Store" src="/images/store.png" class="size-10" />
+        <p class="poppins font-semibold text-2xl">Shopi<span class="text-yellow-500 font-bold text-3xl">fy.</span></p>
+   </div>
+    <div class="p-5 bg-white w-[380px] rounded-[4px] border border-gray-300">
+        <h1 class="font-semibold text-center text-xl">🔐Login</h1>
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <p class="pt-3 ml-1 text-[12px] text-red-500 font-medium text-center">Invalid Credentials</p>
+        }
+        <div class="mt-4 px-2">
+            <form asp-action="Login" method="post">
+                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                <div class="flex flex-col">
+                    <div class="flex items-center border border-gray-200 rounded-sm gap-1 px-0.5">
+                        <span>👤</span>
+                        <input type="email" asp-for="Email" autocomplete="off" autofocus="true" placeholder="Enter your email" class="outline-none border-none text-sm py-2 w-full" />
+                    </div>
+                    <span class="py-1 ml-1 text-[12px] text-red-500 font-medium" asp-validation-for="Email"></span>
+                </div>
+                <div class="flex flex-col">
+                    <div class="flex items-center border border-gray-200 rounded-sm gap-1 px-0.5">
+                        <span>🗝️</span>
+                        <input type="password" asp-for="Password" autocomplete="off" placeholder="Enter your password" class="outline-none border-none text-sm py-2 w-full" />
+                    </div>
+                    <span class="py-1 ml-1 text-[12px] text-red-500 font-medium" asp-validation-for="Password"></span>
+                </div>
+                <div>
+                    <p class="text-[12px] text-right underline cursor-pointer">Forgot Password?</p>
+                </div>
+                <div class="mt-2">
+                    <button type="submit" class="font-medium w-full bg-yellow-400 p-1 py-2 rounded-sm cursor-pointer hover:bg-yellow-500 transition">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

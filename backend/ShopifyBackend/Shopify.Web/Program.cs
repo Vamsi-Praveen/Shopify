@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Shopify.Core.Data;
+
 namespace Shopify.Web
 {
     public class Program
@@ -5,6 +8,12 @@ namespace Shopify.Web
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            //Database Configuration
+            builder.Services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres"));
+            });
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
