@@ -16,8 +16,4 @@
     <ProjectReference Include="..\Shopify.Core\Shopify.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>
