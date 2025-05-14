@@ -6,3 +6,7 @@ body{
 .poppins{
     font-family:"Poppins",sans-serif;
 }
+::-webkit-scrollbar{
+    appearance:none;
+    display:none;
+}

@@ -1,0 +1,95 @@
+﻿@using System.Security.Claims;
+@{
+    var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+}
+<section class="bg-emerald-600 w-[240px] border-r border-gray-300">
+   <a asp-action="Index" asp-controller="Home">
+        <div class="flex items-center gap-1 py-3 justify-center bg-emerald-600">
+            <img alt="Logo" src="/images/store.png" class="h-[30px] w-[30px]" />
+             <p class="poppins font-semibold text-xl">Shopi<span class="ml-1 text-white font-bold text-2xl">fy.</span></p>
+        </div>
+   </a>
+    <div class="h-[1px] w-full bg-emerald-500"></div>
+    <div class="rounded-full text-white">
+        <div>
+            <ul id="sidebar-items">
+                <li>
+                    <a asp-controller="Home" asp-action="Index"
+                       class="block py-3.5 px-3 hover:bg-emerald-800 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2">
+                        <i class="ph ph-speedometer text-lg"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)"
+                       onclick="toggleSubmenu('employee',this)"
+                       class="block py-3.5 px-3 hover:bg-emerald-800 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2 justify-between pr-2">
+                        <span class="flex items-center gap-2">
+                            <i class="ph ph-user text-lg"></i>
+                            Employee
+                        </span>
+                        <i class='ph ph-caret-right'></i>
+                    </a>
+                    <ul class="hidden bg-emerald-700 text-sm" id="employee-submenu">
+                        <li>
+                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"><i class="ph ph-users text-lg"></i>List Employees</a>
+                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-user-plus text-lg"></i>Add Employee</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:void(0)"
+                       onclick="toggleSubmenu('product',this)"
+                       class="block py-3.5 px-3 hover:bg-emerald-800 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2 justify-between pr-2">
+                        <span class="flex items-center gap-2">
+                            <i class="ph ph-bag text-lg"></i>
+                            Products
+                        </span>
+                        <i class='ph ph-caret-right'></i>
+                    </a>
+                    <ul class="hidden bg-emerald-700 text-sm" id="product-submenu">
+                        <li>
+                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"><i class="ph ph-list text-lg"></i>List Products</a>
+                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-plus text-lg"></i>Add Product</a>
+                        </li>                                                                                                                                                
+                    </ul>
+                </li>
+ 
+            </ul>
+        </div>
+    </div>
+</section>
+
+<script>
+    function toggleSubmenu(menu, el) {
+        const submenu = document.getElementById(`${menu}-submenu`);
+        const isHidden = submenu.classList.contains("hidden");
+
+        document.querySelectorAll("#sidebar-items ul[id$='-submenu']").forEach((ul) => {
+            ul.classList.add("hidden");
+        });
+
+        document.querySelectorAll("#sidebar-items li > a").forEach((link) => {
+            link.classList.remove("bg-emerald-800");
+            link.classList.remove("text-emerald-100")
+            const icons = link.querySelectorAll("i");
+            console.log(icons)
+            if (icons.length > 1) {
+                icons[1].classList.remove("ph-caret-down");
+                icons[1].classList.add("ph-caret-right");
+            }
+        });
+
+        if (isHidden) {
+            submenu.classList.remove("hidden");
+            el.classList.add("bg-emerald-800");
+            el.classList.add("text-emerald-100")
+            const icons = el.querySelectorAll("i");
+            if (icons.length > 1) {
+                icons[1].classList.remove("ph-caret-right");
+                icons[1].classList.add("ph-caret-down");
+            }
+        }
+    }
+
+</script>
