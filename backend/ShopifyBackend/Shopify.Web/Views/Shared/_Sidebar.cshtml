@@ -4,9 +4,11 @@
 }
 <section class="bg-emerald-600 w-[240px] h-screen flex flex-col border-r border-gray-300">
    <a asp-action="Index" asp-controller="Home">
-        <div class="flex items-center gap-1 py-3 justify-center bg-emerald-600">
+        <div class="flex items-center gap-2 py-3 justify-center bg-emerald-600">
             <img alt="Logo" src="/images/store.png" class="h-[30px] w-[30px]" />
-             <p class="poppins font-semibold text-xl">Shopi<span class="ml-1 text-white font-bold text-2xl">fy.</span></p>
+            <p class="poppins font-semibold text-xl text-emerald-100">
+                Shopi<span class="font-bold text-xl text-white">fy.</span>
+            </p>
         </div>
    </a>
     <div class="h-[1px] w-full bg-emerald-500"></div>
@@ -68,8 +70,7 @@
                     </a>
                     <ul class="hidden bg-emerald-700 text-sm" id="productimages-submenu">
                         <li>
-                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"><i class="ph ph-list text-lg"></i>List Products</a>
-                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-plus text-lg"></i>Add Product</a>
+                            <a asp-controller="Product" asp-action="Images" class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-plus text-lg"></i>Add Images</a>
                         </li>
                     </ul>
                 </li>

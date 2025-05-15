@@ -10,5 +10,9 @@ namespace Shopify.Web.Controllers
         {
             return View();
         }
+        public IActionResult Images()
+        {
+            return View();
+        }
     }
 }

@@ -17,13 +17,6 @@
             ;
         }
         <main role="main" class="flex-1 flex flex-col h-full">
-            <div>
-                @if (Context.Request.Path.ToString().ToLower().Contains("/auth/login") == false)
-                {
-                    @Html.Partial("_Header")
-                    ;
-                }
-            </div>
             <div class="flex-1 bg-gray-100 overflow-y-scroll">
                 @RenderBody()
             </div>
