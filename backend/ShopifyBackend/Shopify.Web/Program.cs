@@ -24,6 +24,7 @@ namespace Shopify.Web
             {
                 options.LoginPath = "/auth/login";
                 options.LogoutPath = "/auth/logout";
+                options.Cookie.Name = "Shopify";
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
                 options.SlidingExpiration = true;
             });

@@ -33,7 +33,7 @@
                     <ul class="hidden bg-emerald-700 text-sm" id="employee-submenu">
                         <li>
                             <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"><i class="ph ph-user-list text-lg"></i>List Employees</a>
-                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-user-plus text-lg"></i>Add Employee</a>
+                            <a asp-controller="Employee" asp-action="Add" class="block py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-user-plus text-lg"></i>Add Employee</a>
                         </li>
                     </ul>
                 </li>
@@ -50,7 +50,7 @@
                     <ul class="hidden bg-emerald-700 text-sm" id="product-submenu">
                         <li>
                             <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"><i class="ph ph-list-numbers text-lg"></i>List Products</a>
-                            <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-plus-circle text-lg"></i>Add Product</a>
+                            <a asp-controller="Product" asp-action="Add" class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-plus-circle text-lg"></i>Add Product</a>
                             <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-medal text-lg"></i>Brands</a>
                             <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-folders text-lg"></i>Categories</a>
                         </li>                                                                                                                                                

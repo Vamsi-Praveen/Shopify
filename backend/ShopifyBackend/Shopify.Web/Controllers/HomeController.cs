@@ -4,7 +4,6 @@ using System.Diagnostics;
 
 namespace Shopify.Web.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -16,6 +15,10 @@ namespace Shopify.Web.Controllers
 
         public IActionResult Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+
+            }
             return View();
         }
     }
