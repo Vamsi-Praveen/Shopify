@@ -1,42 +1,33 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
-namespace Shopify.Core.Entities
+namespace Shopify.Core.Entities;
+
+public partial class Orderitem
 {
-    public class OrderItem
-    {
-        [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; set; }
 
-        [Required]
-        public Guid OrderId { get; set; }
+    public Guid OrderId { get; set; }
 
-        [Required]
-        public Guid ProductId { get; set; }
+    public Guid ProductId { get; set; }
 
-        [Required]
-        [StringLength(255)]
-        public string ProductNameSnapshot { get; set; }
+    /// <summary>
+    /// Product name at time of order
+    /// </summary>
+    public string ProductNameSnapshot { get; set; } = null!;
 
-        [Required]
-        [StringLength(100)]
-        public string SkuSnapshot { get; set; }
+    public string SkuSnapshot { get; set; } = null!;
 
-        [Required]
-        public int Quantity { get; set; }
+    public int Quantity { get; set; }
 
-        [Required]
-        [Column(TypeName = "decimal(18, 2)")]
-        public decimal UnitPrice { get; set; }
+    /// <summary>
+    /// Price per unit at time of order
+    /// </summary>
+    public decimal UnitPrice { get; set; }
 
-        [Required]
-        [Column(TypeName = "decimal(18, 2)")]
-        public decimal TotalPrice { get; set; }
+    public decimal TotalPrice { get; set; }
 
-        [ForeignKey("OrderId")]
-        public virtual Orders Order { get; set; }
+    public virtual Order Order { get; set; } = null!;
 
-        [ForeignKey("ProductId")]
-        public virtual Product Product { get; set; }
-    }
+    public virtual Product Product { get; set; } = null!;
 }

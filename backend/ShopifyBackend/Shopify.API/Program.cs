@@ -10,7 +10,12 @@ namespace Shopify.API
             var builder = WebApplication.CreateBuilder(args);
 
             //Database Configuration
-            builder.Services.AddDbContext<AppDbContext>(options =>
+            //builder.Services.AddDbContext<AppDbContext>(options =>
+            //{
+            //    options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres"));
+            //});
+
+            builder.Services.AddDbContext<ShopifyContext>(options =>
             {
                 options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres"));
             });

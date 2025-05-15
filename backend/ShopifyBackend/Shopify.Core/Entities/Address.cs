@@ -1,57 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Shopify.Core.Entities
+namespace Shopify.Core.Entities;
+
+public partial class Address
 {
-    public class Address
-    {
-        [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; set; }
 
-        [Required]
-        public Guid UserId { get; set; }
+    public Guid UserId { get; set; }
 
-        [Required]
-        [StringLength(255)]
-        public string AddressLine1 { get; set; }
+    public string AddressLine1 { get; set; } = null!;
 
-        [StringLength(255)]
-        public string? AddressLine2 { get; set; }
+    public string? AddressLine2 { get; set; }
 
-        [Required]
-        [StringLength(100)]
-        public string City { get; set; }
+    public string City { get; set; } = null!;
 
-        [Required]
-        [StringLength(100)]
-        public string State { get; set; }
+    public string State { get; set; } = null!;
 
-        [Required]
-        [StringLength(20)]
-        public string PostalCode { get; set; }
+    public string PostalCode { get; set; } = null!;
 
-        [Required]
-        [StringLength(100)]
-        public string Country { get; set; } = "India";
+    public string Country { get; set; } = null!;
 
-        [StringLength(255)]
-        public string? Landmark { get; set; }
+    public string? Landmark { get; set; }
 
-        [StringLength(50)]
-        public string? AddressType { get; set; }
+    /// <summary>
+    /// e.g., Home, Work, Other
+    /// </summary>
+    public string? AddressType { get; set; }
 
-        public bool IsDefault { get; set; } = false;
+    public bool? IsDefault { get; set; }
 
-        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
-        public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.UtcNow;
+    public DateTime? CreatedAt { get; set; }
 
-        [ForeignKey("UserId")]
-        public virtual Users User { get; set; }
-    }
+    public DateTime? UpdatedAt { get; set; }
 
+    public virtual ICollection<Order> OrderBillingAddresses { get; set; } = new List<Order>();
+
+    public virtual ICollection<Order> OrderShippingAddresses { get; set; } = new List<Order>();
+
+    public virtual User User { get; set; } = null!;
 }

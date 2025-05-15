@@ -1,49 +1,55 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
 
-namespace Shopify.Core.Entities
+namespace Shopify.Core.Entities;
+
+public partial class Product
 {
-    public class Product
-    {
-        [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; set; }
 
-        [Required]
-        [StringLength(255)]
-        public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
-        [Required]
-        [StringLength(100)]
-        public string Sku { get; set; }
+    /// <summary>
+    /// Stock Keeping Unit
+    /// </summary>
+    public string Sku { get; set; } = null!;
 
-        [Required]
-        public string Description { get; set; }
+    public string Description { get; set; } = null!;
 
-        [StringLength(500)]
-        public string? ShortDescription { get; set; }
+    public string? ShortDescription { get; set; }
 
-        [Required]
-        public Guid CategoryId { get; set; }
+    public Guid CategoryId { get; set; }
 
-        public Guid? BrandId { get; set; }
+    public Guid? BrandId { get; set; }
 
-        [Required]
-        [Column(TypeName = "decimal(18, 2)")]
-        public decimal BasePrice { get; set; }
+    public decimal BasePrice { get; set; }
 
-        [Required]
-        [Column(TypeName = "decimal(18, 2)")]
-        public decimal SellingPrice { get; set; }
+    public decimal SellingPrice { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string UnitOfMeasure { get; set; }
+    /// <summary>
+    /// e.g., kg, g, piece, liter, pack
+    /// </summary>
+    public string UnitOfMeasure { get; set; } = null!;
 
-        public bool IsActive { get; set; } = true;
-        public bool IsFeatured { get; set; } = false;
+    public bool? IsActive { get; set; }
 
-        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
-        public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.UtcNow;
+    public bool? IsFeatured { get; set; }
 
-    }
+    public DateTime? CreatedAt { get; set; }
+
+    public DateTime? UpdatedAt { get; set; }
+
+    public virtual Brand? Brand { get; set; }
+
+    public virtual Category Category { get; set; } = null!;
+
+    public virtual Inventory? Inventory { get; set; }
+
+    public virtual ICollection<Inventorytransaction> Inventorytransactions { get; set; } = new List<Inventorytransaction>();
+
+    public virtual ICollection<Orderitem> Orderitems { get; set; } = new List<Orderitem>();
+
+    public virtual ICollection<Productimage> Productimages { get; set; } = new List<Productimage>();
+
+    public virtual ICollection<Productreview> Productreviews { get; set; } = new List<Productreview>();
 }

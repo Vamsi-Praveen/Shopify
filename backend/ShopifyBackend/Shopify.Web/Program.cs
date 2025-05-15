@@ -11,7 +11,12 @@ namespace Shopify.Web
             var builder = WebApplication.CreateBuilder(args);
 
             //Database Configuration
-            builder.Services.AddDbContext<AppDbContext>(options =>
+            //builder.Services.AddDbContext<AppDbContext>(options =>
+            //{
+            //    options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres"));
+            //});
+
+            builder.Services.AddDbContext<ShopifyContext>(options =>
             {
                 options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres"));
             });
@@ -24,7 +29,6 @@ namespace Shopify.Web
             {
                 options.LoginPath = "/auth/login";
                 options.LogoutPath = "/auth/logout";
-                options.Cookie.Name = "Shopify";
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
                 options.SlidingExpiration = true;
             });
@@ -53,8 +57,9 @@ namespace Shopify.Web
             app.UseRouting();
 
             app.UseSession();
-            app.UseAuthorization();
             app.UseAuthentication();
+
+            app.UseAuthorization();
 
 
             app.MapControllerRoute(

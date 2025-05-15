@@ -1,28 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
-namespace Shopify.Core.Entities
+namespace Shopify.Core.Entities;
+
+public partial class Productimage
 {
-    public class ProductImage
-    {
-        [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; set; }
 
-        [Required]
-        public Guid ProductId { get; set; }
+    public Guid ProductId { get; set; }
 
-        [Required]
-        [StringLength(1024)]
-        public string ImageUrl { get; set; }
+    public string ImageUrl { get; set; } = null!;
 
-        [StringLength(255)]
-        public string? AltText { get; set; }
+    public string? AltText { get; set; }
 
-        public bool IsPrimary { get; set; } = false;
-        public int DisplayOrder { get; set; } = 0;
+    public bool? IsPrimary { get; set; }
 
-        // Navigation Property
-        [ForeignKey("ProductId")]
-        public virtual Product Product { get; set; }
-    }
+    public int? DisplayOrder { get; set; }
+
+    public virtual Product Product { get; set; } = null!;
 }

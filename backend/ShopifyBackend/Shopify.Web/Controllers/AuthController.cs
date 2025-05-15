@@ -11,9 +11,9 @@ namespace Shopify.Web.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly ShopifyContext _context;
 
-        public AuthController(AppDbContext context)
+        public AuthController(ShopifyContext context)
         {
             _context = context;
         }
@@ -31,7 +31,7 @@ namespace Shopify.Web.Controllers
             {
                 return View(user);
             }
-            var validUser = await _context.users.FirstOrDefaultAsync(u => u.Email == user.Email);
+            var validUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
 
 
             if (validUser == null)
@@ -40,7 +40,7 @@ namespace Shopify.Web.Controllers
                 return View(user);
             }
 
-            bool isVerifiedPassword = BCrypt.Net.BCrypt.Verify(user.Password, validUser.Password);
+            bool isVerifiedPassword = BCrypt.Net.BCrypt.Verify(user.Password, validUser.PasswordHash);
 
             if (!isVerifiedPassword)
             {
@@ -52,16 +52,16 @@ namespace Shopify.Web.Controllers
 
             if (lastLogin == null)
             {
-                lastLogin = DateTimeOffset.UtcNow;
+                lastLogin = DateTime.Now;
             }
 
-            validUser.LastLogin = DateTimeOffset.UtcNow;
+            validUser.LastLogin = DateTime.Now;
             await _context.SaveChangesAsync();
 
             //claims
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name,validUser.Name),
+                new Claim(ClaimTypes.Name,validUser.FullName),
                 new Claim(ClaimTypes.Email,user.Email),
                 new Claim(ClaimTypes.NameIdentifier,validUser.Id.ToString()),
                 new Claim("LastLogin", lastLogin?.ToString() ?? ""),
