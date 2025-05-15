@@ -77,11 +77,6 @@ _ReSharper*
 backend/ShopifyBackend/Shopify.Web/appsettings.*.json
 backend/ShopifyBackend/Shopify.API/appsettings.*.json
 
-# Ignore all appsettings JSON files
-backend/ShopifyBackend/Shopify.Web/appsettings*.json
-backend/ShopifyBackend/Shopify.API/appsettings*.json
-
-
 backend/ShopifyBackend/Shopify.Core/Migrations
 
 # NuGet
