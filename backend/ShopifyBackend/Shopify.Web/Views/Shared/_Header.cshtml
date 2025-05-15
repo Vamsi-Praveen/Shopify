@@ -1,7 +1,7 @@
 ﻿@using System.Security.Claims
 @{
     string username = User.FindFirst(ClaimTypes.Name)?.Value;
-    string lastlogin = User.FindFirst("LastLogin")?.Value;
+    string lastlogin = User.FindFirst("LastLogin")?.Value.ToString().Split("+")[0];
 }
 <header class="bg-white border-b border-gray-200 px-3 py-[17.5px] flex items-center justify-between">
     <p class="text-[14px] text-black">Welcome👋, <span class="font-semibold">@username</span></p>

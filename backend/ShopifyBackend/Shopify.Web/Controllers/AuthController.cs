@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Shopify.Web.Models;
 using Shopify.Core.Data;
+using Shopify.Core.Entities;
 
 namespace Shopify.Web.Controllers
 {
@@ -51,10 +52,10 @@ namespace Shopify.Web.Controllers
 
             if (lastLogin == null)
             {
-                lastLogin = DateTime.Now;
+                lastLogin = DateTimeOffset.UtcNow;
             }
 
-            validUser.LastLogin = DateTime.Now;
+            validUser.LastLogin = DateTimeOffset.UtcNow;
             await _context.SaveChangesAsync();
 
             //claims
