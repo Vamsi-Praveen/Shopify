@@ -1,0 +1,16 @@
+﻿<div class="hidden absolute bg-black/60 inset-0 flex items-center justify-center" id="modal">
+    <div class="w-[380px] h-[250px] bg-white rounded-sm border border-gray-200 flex items-center justify-center flex-col gap-2 relative">
+        <div class="rounded-full size-18 flex items-center justify-center" id="modal-icon-container">
+            <i class="ph-bold ph-warning-circle text-4xl"></i>
+        </div>
+        <div class="flex items-center justify-center flex-col gap-2 p-2">
+            <p class="font-medium text-lg" id="modal-title">Success</p>
+            <p class="text-center text-sm text-gray-600" id="modal-content">Success Message</p>
+        </div>
+
+        <button class="absolute top-3 right-3 cursor-pointer" onclick="closeModal()">
+            <i class="ph-bold ph-x text-xl"></i>
+        </button>
+    </div>
+</div>
+<script src="~/js/modal.js"></script>

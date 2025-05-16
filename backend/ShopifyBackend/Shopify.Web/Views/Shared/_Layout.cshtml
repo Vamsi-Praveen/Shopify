@@ -9,19 +9,33 @@
     <link rel="stylesheet" href="~/Shopify.Web.styles.css" asp-append-version="true" />
     <script src="https://cdn.jsdelivr.net/npm/@@phosphor-icons/web@2.1.2"></script>
 </head>
-<body class="h-screen">
+<body class="h-screen antialiased">
     <div class="flex h-full">
+        @{
+            var currentPath = Context.Request.Path.ToString().ToLowerInvariant();
+            bool showSidebarAndHeader = !currentPath.Contains("/auth/login");
+            string[] homePaths = { "/", "/home", "/home/index", "/admin", "/admin/", "/admin/home", "/admin/home/index" };
+            bool isHomePage = homePaths.Contains(currentPath);
+        }
         @if (Context.Request.Path.ToString().ToLower().Contains("/auth/login") == false)
         {
             @Html.Partial("_Sidebar")
             ;
         }
         <main role="main" class="flex-1 flex flex-col h-full">
+            <div>
+                @if (showSidebarAndHeader && !isHomePage)
+                {
+                    @Html.Partial("_Header")
+                    ;
+                }
+            </div>
             <div class="flex-1 bg-gray-100 overflow-y-scroll">
                 @RenderBody()
             </div>
         </main>
     </div>
+     @Html.Partial("_Modal");
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

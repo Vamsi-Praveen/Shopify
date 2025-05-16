@@ -14,5 +14,10 @@ namespace Shopify.Web.Controllers
         {
             return View();
         }
+
+        public IActionResult Brands()
+        {
+            return View();
+        }
     }
 }
