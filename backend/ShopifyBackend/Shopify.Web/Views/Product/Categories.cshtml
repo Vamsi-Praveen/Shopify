@@ -1,33 +1,32 @@
 ﻿@{
-    ViewData["Title"] = "Product Brands";
- }
+    ViewData["Title"] = "Product Categories";
+}
 
 <div class="p-4 space-y-6">
     <div class="flex items-center justify-between items-start gap-3">
         <div>
-            <h1 class="text-2xl font-semibold text-gray-800">Product Brands</h1>
-            <p class="text-sm text-gray-500">Manage all your product brands.</p>
+            <h1 class="text-2xl font-semibold text-gray-800">Product Categories</h1>
+            <p class="text-sm text-gray-500">Manage all your product Categories.</p>
         </div>
         <div>
-            <button onclick="openBrandModal()"
-               class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 border border-transparent rounded-sm cursor-pointer shadow-sm hover:bg-emerald-700 flex items-center gap-2">
+            <button onclick="openCategoryModal()"
+                    class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 border border-transparent rounded-sm cursor-pointer shadow-sm hover:bg-emerald-700 flex items-center gap-2">
                 <i class="ph ph-plus-circle text-lg"></i>
-                Add New Brand
+                Add New Category
             </button>
         </div>
     </div>
     <div>
-
     </div>
 </div>
-<div class="hidden absolute bg-black/60 inset-0 flex items-center justify-center" id="brand-modal">
+<div class="hidden absolute bg-black/60 inset-0 flex items-center justify-center" id="category-modal">
     <div class="bg-white rounded-[4px] border border-gray-300 w-2/4 p-3 px-5 space-y-3 relative">
-        <button class="absolute top-3 right-3 cursor-pointer" onclick="closeBrandModal()">
+        <button class="absolute top-3 right-3 cursor-pointer" onclick="closeCategoryModal()">
             <i class="ph-bold ph-x text-xl"></i>
         </button>
         <div>
-            <h1 class="text-2xl font-semibold text-gray-800">Add Product Brand</h1>
-            <p class="text-sm text-gray-500">Create new product brand</p>
+            <h1 class="text-2xl font-semibold text-gray-800">Add Product Category</h1>
+            <p class="text-sm text-gray-500">Create new product category</p>
         </div>
         <div>
             <form method="post" class="space-y-3">
@@ -70,7 +69,7 @@
                     <button type="submit"
                             class="bg-emerald-600 hover:bg-emerald-700 transition text-white rounded-sm px-4 py-2 cursor-pointer flex items-center gap-2">
                         <i class="ph ph-plus text-lg"></i>
-                        Create Brand
+                        Create Category
                     </button>
                 </div>
             </form>
@@ -81,7 +80,7 @@
 
 
 <script>
-    const brandModal = document.getElementById("brand-modal")
+    const categoryModal = document.getElementById("category-modal")
 
     const thumbnailUpload = document.getElementById('thumbnail-upload');
     const thumbnailPreview = document.getElementById('thumbnail-preview');
@@ -127,12 +126,12 @@
         removeThumbnailButton.classList.add('hidden');
     }
 
-    function closeBrandModal(){
-        brandModal.classList.add("hidden")
+    function closeCategoryModal(){
+        categoryModal.classList.add("hidden")
     }
 
-    function openBrandModal(){
-        brandModal.classList.remove("hidden")
+    function openCategoryModal(){
+        categoryModal.classList.remove("hidden")
     }
 
 </script>
