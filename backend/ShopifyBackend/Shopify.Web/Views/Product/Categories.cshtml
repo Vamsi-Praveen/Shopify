@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Product Categories";
 }
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 <div class="p-4 space-y-6">
     <div class="flex items-center justify-between items-start gap-3">
@@ -16,9 +17,9 @@
             </button>
         </div>
     </div>
-    <div>
-    </div>
+    <div></div>
 </div>
+    
 <div class="hidden absolute bg-black/60 inset-0 flex items-center justify-center" id="category-modal">
     <div class="bg-white rounded-[4px] border border-gray-300 w-2/4 p-3 px-5 space-y-3 relative">
         <button class="absolute top-3 right-3 cursor-pointer" onclick="closeCategoryModal()">
@@ -31,17 +32,17 @@
         <div>
             <form method="post" class="space-y-3">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Brand Name</label>
-                    <input type="text" placeholder="e.g. Amul"
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Category Name</label>
+                    <input type="text" placeholder="e.g. Milk"
                            class="w-full px-3 py-2 border border-gray-200 rounded-sm outline-none" />
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Brand Description</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Category Description</label>
                     <textarea rows="5" placeholder="Enter Description"
                               class="w-full px-3 py-2 border border-gray-200 rounded-sm outline-none"></textarea>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Brand Logo</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Category Logo (Optional)</label>
                     <div class="mt-1 flex items-center gap-4 p-4 border-2 border-gray-300 border-dashed rounded-md">
                         <div id="thumbnail-preview-container" class="shrink-0">
                             <img id="thumbnail-preview" src="#" alt="Thumbnail Preview" class="h-20 w-20 object-cover rounded hidden" />
@@ -78,60 +79,77 @@
 </div>
 
 
+<script> 
 
-<script>
-    const categoryModal = document.getElementById("category-modal")
+      $(document).ready(function () { 
+         $('#categoriesTable').DataTable({ 
+             responsive: true, 
+             paging: true, 
+             searching: true, 
+             ordering: true, 
+             autoWidth: false, 
+             columnDefs: [{ orderable: false, targets: -1 }], 
+             language: { 
+                 search: "_INPUT_", 
+                 searchPlaceholder: "Search Categories...", 
+                 lengthMenu: "Show _MENU_ categories per page", 
+                 info: "Showing _START_ to _END_ of _TOTAL_ categories", 
+             } 
+         }); 
+     }); 
 
-    const thumbnailUpload = document.getElementById('thumbnail-upload');
-    const thumbnailPreview = document.getElementById('thumbnail-preview');
-    const thumbnailPlaceholder = document.getElementById('thumbnail-placeholder');
-    const thumbnailFilename = document.getElementById('thumbnail-filename');
-    const removeThumbnailButton = document.getElementById('remove-thumbnail-button');
+     const categoryModal = document.getElementById("category-modal") 
 
-    thumbnailUpload.addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const validImageTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/webp'];
-            if (!validImageTypes.includes(file.type)) {
-                alert('Invalid file type. Please select a PNG, JPG, GIF, or WEBP file.');
-                thumbnailUpload.value = '';
-                return;
-            }
-            if (file.size > 2 * 1024 * 1024) {
-                alert('File is too large. Maximum size is 2MB.');
-                thumbnailUpload.value = '';
-                return;
-            }
+     const thumbnailUpload = document.getElementById('thumbnail-upload'); 
+     const thumbnailPreview = document.getElementById('thumbnail-preview'); 
+     const thumbnailPlaceholder = document.getElementById('thumbnail-placeholder'); 
+     const thumbnailFilename = document.getElementById('thumbnail-filename'); 
+     const removeThumbnailButton = document.getElementById('remove-thumbnail-button'); 
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                thumbnailPreview.src = e.target.result;
-                thumbnailPreview.classList.remove('hidden');
-                thumbnailPlaceholder.classList.add('hidden');
-            }
-            reader.readAsDataURL(file);
-            thumbnailFilename.textContent = file.name;
-            removeThumbnailButton.classList.remove('hidden');
-        } else {
-            removeThumbnail();
-        }
-    });
+     thumbnailUpload.addEventListener('change', function(event) { 
+         const file = event.target.files[0]; 
+         if (file) { 
+             const validImageTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/webp']; 
+             if (!validImageTypes.includes(file.type)) { 
+                 alert('Invalid file type. Please select a PNG, JPG, GIF, or WEBP file.'); 
+                 thumbnailUpload.value = ''; 
+                 return; 
+             } 
+             if (file.size > 2 * 1024 * 1024) { 
+                 alert('File is too large. Maximum size is 2MB.'); 
+                 thumbnailUpload.value = ''; 
+                 return; 
+             } 
 
-    function removeThumbnail() {
-        thumbnailPreview.src = '#';
-        thumbnailPreview.classList.add('hidden');
-        thumbnailPlaceholder.classList.remove('hidden');
-        thumbnailUpload.value = '';
-        thumbnailFilename.textContent = '';
-        removeThumbnailButton.classList.add('hidden');
-    }
+             const reader = new FileReader(); 
+             reader.onload = function(e) { 
+                 thumbnailPreview.src = e.target.result; 
+                 thumbnailPreview.classList.remove('hidden'); 
+                 thumbnailPlaceholder.classList.add('hidden'); 
+             } 
+             reader.readAsDataURL(file); 
+             thumbnailFilename.textContent = file.name; 
+             removeThumbnailButton.classList.remove('hidden'); 
+         } else { 
+             removeThumbnail(); 
+         } 
+     }); 
 
-    function closeCategoryModal(){
-        categoryModal.classList.add("hidden")
-    }
+     function removeThumbnail() { 
+         thumbnailPreview.src = '#'; 
+         thumbnailPreview.classList.add('hidden'); 
+         thumbnailPlaceholder.classList.remove('hidden'); 
+         thumbnailUpload.value = ''; 
+         thumbnailFilename.textContent = ''; 
+         removeThumbnailButton.classList.add('hidden'); 
+     } 
 
-    function openCategoryModal(){
-        categoryModal.classList.remove("hidden")
-    }
+     function closeCategoryModal(){ 
+         categoryModal.classList.add("hidden") 
+     } 
+
+     function openCategoryModal(){ 
+         categoryModal.classList.remove("hidden") 
+     } 
 
 </script>
