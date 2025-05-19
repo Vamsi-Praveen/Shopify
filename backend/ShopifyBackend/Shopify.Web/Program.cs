@@ -28,6 +28,7 @@ namespace Shopify.Web
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IBrandService, BrandService>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

@@ -1,6 +1,25 @@
-﻿@{
+﻿@model Shopify.Web.Models.BrandViewModel;
+@{
     ViewData["Title"] = "Product Brands";
- }
+    bool showModal = TempData["ModalMessage"] != null && TempData["ModalTitle"] != null && TempData["ModalType"] != null;
+}
+<link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+
+@section Scripts {
+    @if (showModal)
+    {
+        <script>
+            openModal('@TempData["ModalType"]','@TempData["ModalTitle"]','@TempData["ModalMessage"]');
+        </script>
+    }
+
+    @if (TempData["OpenModal"] != null && (bool)TempData["OpenModal"])
+    {
+        <script>
+            openBrandModal();
+        </script>
+    }
+}
 
 <div class="p-4 space-y-6">
     <div class="flex items-center justify-between items-start gap-3">
@@ -10,220 +29,79 @@
         </div>
         <div>
             <button onclick="openBrandModal()"
-               class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 border border-transparent rounded-sm cursor-pointer shadow-sm hover:bg-emerald-700 flex items-center gap-2">
+            class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 border border-transparent rounded-sm cursor-pointer shadow-sm hover:bg-emerald-700 flex items-center gap-2">
                 <i class="ph ph-plus-circle text-lg"></i>
                 Add New Brand
             </button>
         </div>
     </div>
     <div>
-        <table id="search-table">
+        <table id="search-table" class="table-auto w-full text-left text-sm text-gray-700 border-collapse">
             <thead>
                 <tr>
                     <th>
-                        <span class="flex items-center">
-                            Company Name
+                        <span class="grid place-items-center text-black">
+                            Brand Logo
                         </span>
                     </th>
                     <th>
-                        <span class="flex items-center">
-                            Ticker
+                        <span class="grid place-items-center text-black">
+                            Brand Name
                         </span>
                     </th>
                     <th>
-                        <span class="flex items-center">
-                            Stock Price
+                        <span class="grid place-items-center text-black">
+                            Brand Description
                         </span>
                     </th>
                     <th>
-                        <span class="flex items-center">
-                            Market Capitalization
+                        <span class="grid place-items-center text-black">
+                            Status
+                        </span>
+                    </th>
+                    <th>
+                        <span class="grid place-items-center text-black">
+                            Action
                         </span>
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Apple Inc.</td>
-                    <td>AAPL</td>
-                    <td>$192.58</td>
-                    <td>$3.04T</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Microsoft Corporation</td>
-                    <td>MSFT</td>
-                    <td>$340.54</td>
-                    <td>$2.56T</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Alphabet Inc.</td>
-                    <td>GOOGL</td>
-                    <td>$134.12</td>
-                    <td>$1.72T</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Amazon.com Inc.</td>
-                    <td>AMZN</td>
-                    <td>$138.01</td>
-                    <td>$1.42T</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">NVIDIA Corporation</td>
-                    <td>NVDA</td>
-                    <td>$466.19</td>
-                    <td>$1.16T</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Tesla Inc.</td>
-                    <td>TSLA</td>
-                    <td>$255.98</td>
-                    <td>$811.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Meta Platforms Inc.</td>
-                    <td>META</td>
-                    <td>$311.71</td>
-                    <td>$816.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Berkshire Hathaway Inc.</td>
-                    <td>BRK.B</td>
-                    <td>$354.08</td>
-                    <td>$783.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">TSMC</td>
-                    <td>TSM</td>
-                    <td>$103.51</td>
-                    <td>$538.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">UnitedHealth Group Incorporated</td>
-                    <td>UNH</td>
-                    <td>$501.96</td>
-                    <td>$466.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Johnson & Johnson</td>
-                    <td>JNJ</td>
-                    <td>$172.85</td>
-                    <td>$452.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">JPMorgan Chase & Co.</td>
-                    <td>JPM</td>
-                    <td>$150.23</td>
-                    <td>$431.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Visa Inc.</td>
-                    <td>V</td>
-                    <td>$246.39</td>
-                    <td>$519.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Eli Lilly and Company</td>
-                    <td>LLY</td>
-                    <td>$582.97</td>
-                    <td>$552.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Walmart Inc.</td>
-                    <td>WMT</td>
-                    <td>$159.67</td>
-                    <td>$429.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Samsung Electronics Co., Ltd.</td>
-                    <td>005930.KS</td>
-                    <td>$70.22</td>
-                    <td>$429.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Procter & Gamble Co.</td>
-                    <td>PG</td>
-                    <td>$156.47</td>
-                    <td>$366.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Nestlé S.A.</td>
-                    <td>NESN.SW</td>
-                    <td>$120.51</td>
-                    <td>$338.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Roche Holding AG</td>
-                    <td>ROG.SW</td>
-                    <td>$296.00</td>
-                    <td>$317.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Chevron Corporation</td>
-                    <td>CVX</td>
-                    <td>$160.92</td>
-                    <td>$310.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">LVMH Moët Hennessy Louis Vuitton</td>
-                    <td>MC.PA</td>
-                    <td>$956.60</td>
-                    <td>$478.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Pfizer Inc.</td>
-                    <td>PFE</td>
-                    <td>$35.95</td>
-                    <td>$200.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Novo Nordisk A/S</td>
-                    <td>NVO</td>
-                    <td>$189.15</td>
-                    <td>$443.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">PepsiCo, Inc.</td>
-                    <td>PEP</td>
-                    <td>$182.56</td>
-                    <td>$311.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">ASML Holding N.V.</td>
-                    <td>ASML</td>
-                    <td>$665.72</td>
-                    <td>$273.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">The Coca-Cola Company</td>
-                    <td>KO</td>
-                    <td>$61.37</td>
-                    <td>$265.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap">Oracle Corporation</td>
-                    <td>ORCL</td>
-                    <td>$118.36</td>
-                    <td>$319.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Merck & Co., Inc.</td>
-                    <td>MRK</td>
-                    <td>$109.12</td>
-                    <td>$276.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Broadcom Inc.</td>
-                    <td>AVGO</td>
-                    <td>$861.80</td>
-                    <td>$356.00B</td>
-                </tr>
-                <tr>
-                    <td class="font-medium text-gray-900 whitespace-nowrap ">Mastercard Incorporated</td>
-                    <td>MA</td>
-                    <td>$421.44</td>
-                    <td>$396.00B</td>
-                </tr>
-            </tbody>
+                @{
+                    foreach(var brand in Model.Brands)
+                    {
+                        <tr class="text-center">
+                            <td>
+                                @{
+                                    if(brand.LogoUrl == null)
+                                    {
+                                        <p>No Logo</p>
+                                    }
+                                    else
+                                    {
+                                        <img alt="brandlogo" src="@brand.LogoUrl" class="size-25 object-contain"/>
+                                    }
+                                }
+                            </td>
+                            <td>@brand.Name</td>
+                            <td class="text-justify">@brand.Description</td>
+                            <td class="text-center">
+                                @{
+                                    if (brand.IsActive == true)
+                                    {
+                                        <span class="inline-block w-3 h-3 rounded-full bg-green-500" title="Active"></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="inline-block w-3 h-3 rounded-full bg-red-500" title="Inactive"></span>
+                                    }
+                                }
+                            </td>
+                            <td>Edit | Delete</td>
+                        </tr>
+                    }
+                }
+           </tbody>
         </table>
     </div>
 </div>
@@ -237,16 +115,18 @@
             <p class="text-sm text-gray-500">Create new product brand</p>
         </div>
         <div>
-            <form method="post" class="space-y-3">
+            <form method="post" asp-action="Brands" class="space-y-3">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Brand Name</label>
-                    <input type="text" placeholder="e.g. Amul"
+                    <input type="text" placeholder="e.g. Amul" asp-for="Brand.Name"
                            class="w-full px-3 py-2 border border-gray-200 rounded-sm outline-none" />
+                    <span asp-validation-for="Brand.Name" class="text-red-500 text-sm"></span>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Brand Description</label>
-                    <textarea rows="5" placeholder="Enter Description"
+                    <textarea rows="5" placeholder="Enter Description" asp-for="Brand.Description"
                               class="w-full px-3 py-2 border border-gray-200 rounded-sm outline-none"></textarea>
+                    <span asp-validation-for="Brand.Description" class="text-red-500 text-sm"></span>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Brand Logo (Optional)</label>
