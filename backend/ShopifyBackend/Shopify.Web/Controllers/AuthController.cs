@@ -6,16 +6,18 @@ using System.Security.Claims;
 using Shopify.Web.Models;
 using Shopify.Core.Data;
 using Shopify.Core.Entities;
+using Shopify.Core.Domain.Services;
 
 namespace Shopify.Web.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly ShopifyContext _context;
+        private readonly IUserService _userService;
 
-        public AuthController(ShopifyContext context)
+
+        public AuthController(IUserService userService)
         {
-            _context = context;
+            _userService = userService;
         }
 
         public IActionResult Login(string? ReturnUrl)
@@ -31,41 +33,24 @@ namespace Shopify.Web.Controllers
             {
                 return View(user);
             }
-            var validUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
+            var validUser = await _userService.VerifyUserLogin(user.Email,user.Password);
 
 
-            if (validUser == null)
+            if (!validUser.Success)
             {
-                user.ErrorMessage = "No User Found";
+                user.ErrorMessage = validUser.Message;
                 return View(user);
             }
 
-            bool isVerifiedPassword = BCrypt.Net.BCrypt.Verify(user.Password, validUser.PasswordHash);
 
-            if (!isVerifiedPassword)
-            {
-                user.ErrorMessage = "Invalid Credentials";
-                return View(user);
-            }
-
-            var lastLogin = validUser.LastLogin;
-
-            if (lastLogin == null)
-            {
-                lastLogin = DateTime.Now;
-            }
-
-            validUser.LastLogin = DateTime.Now;
-            await _context.SaveChangesAsync();
-
+            var userData = await _userService.GetUserByEmail(user.Email);
             //claims
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name,validUser.FullName),
-                new Claim(ClaimTypes.Email,user.Email),
-                new Claim(ClaimTypes.NameIdentifier,validUser.Id.ToString()),
-                new Claim("LastLogin", lastLogin?.ToString() ?? ""),
-                new Claim(ClaimTypes.Role, validUser.Role.ToString())
+                new Claim(ClaimTypes.Name,userData.FullName),
+                new Claim(ClaimTypes.NameIdentifier,userData.Id.ToString()),
+                new Claim("LastLogin", userData.LastLogin.ToString()),
+                new Claim(ClaimTypes.Role, userData.Role.ToString())
             };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

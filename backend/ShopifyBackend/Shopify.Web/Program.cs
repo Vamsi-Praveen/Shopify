@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Shopify.Core.Data;
+using Shopify.Core.Domain.Repositories;
+using Shopify.Core.Domain.Services;
+using Shopify.Core.Repositories;
+using Shopify.Core.Services;
 
 namespace Shopify.Web
 {
@@ -20,6 +24,10 @@ namespace Shopify.Web
             {
                 options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres"));
             });
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
