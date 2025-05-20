@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Shopify.Core.Domain.Services;
 using Shopify.Core.Entities;
+using Shopify.Core.Enums;
 using Shopify.Web.DTO;
 
 namespace Shopify.Web.Controllers
@@ -36,8 +37,9 @@ namespace Shopify.Web.Controllers
                 Username = user.Username,
                 PhoneNumber = user.PhoneNumber,
                 Role = user.Role,
+                Status = UserStatusEnum.NEW.ToString(),
                 DateOfBirth = user.DateOfBirth,
-                PasswordHash = "$2a$12$iG3JanJJGwm.ubYl4SWpT.NQGPJGvUDCZWjO/182FmAv7P.AyBHdG"
+                PasswordHash = "$2a$12$V2FPj/Zbv8IPfQhUTiet.uX1oGRJ48Z2HMY94.lJRdrZ9qikA9vYC"
             };
 
             bool isSuccess = await _userService.CreateUser(newUser);

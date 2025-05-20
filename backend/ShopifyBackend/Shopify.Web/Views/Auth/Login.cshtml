@@ -12,7 +12,7 @@
         <h1 class="font-semibold text-center text-xl">🔐Login</h1>
         @if (!string.IsNullOrEmpty(Model.ErrorMessage))
         {
-            <p class="pt-3 ml-1 text-[12px] text-red-500 font-medium text-center">Invalid Credentials</p>
+            <p class="pt-3 ml-1 text-[12px] text-red-500 font-medium text-center">@Model.ErrorMessage</p>
         }
         <div class="mt-4 px-2">
             <form asp-action="Login" method="post">

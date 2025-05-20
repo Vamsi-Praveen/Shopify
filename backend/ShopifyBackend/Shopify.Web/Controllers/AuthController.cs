@@ -7,6 +7,7 @@ using Shopify.Web.Models;
 using Shopify.Core.Data;
 using Shopify.Core.Entities;
 using Shopify.Core.Domain.Services;
+using Shopify.Core.Enums;
 
 namespace Shopify.Web.Controllers
 {
@@ -44,6 +45,17 @@ namespace Shopify.Web.Controllers
 
 
             var userData = await _userService.GetUserByEmail(user.Email);
+
+            if(userData.Status == UserStatusEnum.NEW.ToString())
+            {
+                return RedirectToAction("ResetPassword");
+            }
+
+            if(userData.Status == UserStatusEnum.SUSPENDED.ToString())
+            {
+                user.ErrorMessage = "User Login Suspended! Contact Admin";
+                return View(user);
+            }
             //claims
             var claims = new List<Claim>()
             {
@@ -74,6 +86,29 @@ namespace Shopify.Web.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return RedirectToAction("Login");
+        }
+
+
+        public IActionResult ResetPassword()
+        {
+            return View(new ResetPasswordViewModel());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (model.NewPassword != model.ConfirmPassword)
+            {
+                model.ErrorMessage = "Password's must be same";
+                return View(model);
+            }
+
+            return View(model);
         }
     }
 }

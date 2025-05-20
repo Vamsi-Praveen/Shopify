@@ -15,10 +15,10 @@
         @{
             var currentPath = Context.Request.Path.ToString().ToLowerInvariant();
             bool showSidebarAndHeader = !currentPath.Contains("/auth/login");
-            string[] homePaths = { "/", "/home", "/home/index", "/admin", "/admin/", "/admin/home", "/admin/home/index" };
+            string[] homePaths = { "/", "/home", "/home/index", "/admin", "/admin/", "/admin/home", "/admin/home/index","/auth/resetpassword" };
             bool isHomePage = homePaths.Contains(currentPath);
         }
-        @if (Context.Request.Path.ToString().ToLower().Contains("/auth/login") == false)
+        @if (Context.Request.Path.ToString().ToLower().Contains("/auth/login") == false && Context.Request.Path.ToString().ToLower().Contains("/auth/resetpassword") == false)
         {
             @Html.Partial("_Sidebar")
             ;
