@@ -37,7 +37,7 @@
                             </a>
                             <ul class="hidden bg-emerald-700 text-sm" id="employee-submenu">
                                 <li>
-                                    <a class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"><i class="ph ph-user-list text-lg"></i>List Employees</a>
+                                    <a asp-controller="Employee" asp-action="List" class="block  py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"><i class="ph ph-user-list text-lg"></i>List Employees</a>
                                     <a asp-controller="Employee" asp-action="Add" class="block py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-user-plus text-lg"></i>Add Employee</a>
                                     <a asp-controller="Employee" asp-action="Reset" class="block py-3.5 px-8 transition cursor-pointer hover:text-emerald-100 flex items-center gap-2"> <i class="ph ph-password text-lg"></i>Reset Password</a>
                                 </li>

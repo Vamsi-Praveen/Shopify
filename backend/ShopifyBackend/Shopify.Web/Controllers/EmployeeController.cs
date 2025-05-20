@@ -104,5 +104,11 @@ namespace Shopify.Web.Controllers
 
 
         }
+
+        public async Task<IActionResult> List()
+        {
+            var users = await _userService.ListAllUsersAsync();
+            return View(users);
+        }
     }
 }

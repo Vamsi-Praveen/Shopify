@@ -1,0 +1,94 @@
+﻿@model IEnumerable<Shopify.Core.Entities.User>;
+@{
+    ViewData["Title"] = "Employees";
+    bool showModal = TempData["ModalMessage"] != null && TempData["ModalTitle"] != null && TempData["ModalType"] != null;
+}
+<link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+
+@section Scripts {
+    @if (showModal)
+    {
+        <script>
+            openModal('@TempData["ModalType"]','@TempData["ModalTitle"]','@TempData["ModalMessage"]');
+        </script>
+    }
+}
+
+<div class="p-4 space-y-6">
+    <div class="flex items-center justify-between items-start gap-3">
+        <div>
+            <h1 class="text-2xl font-semibold text-gray-800">Employees/Users</h1>
+            <p class="text-sm text-gray-500">Manage all your users.</p>
+        </div>
+        <div>
+            <a asp-action="Add"
+                    class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 border border-transparent rounded-sm cursor-pointer shadow-sm hover:bg-emerald-700 flex items-center gap-2">
+                <i class="ph ph-plus-circle text-lg"></i>
+                Add New User
+            </a>
+        </div>
+    </div>
+    <div>
+        <table id="search-table" class="table-auto w-full text-left text-sm text-gray-700 border-collapse">
+            <thead>
+                <tr>
+                    <th>
+                        <span class="text-black">
+                            Full Name
+                        </span>
+                    </th>
+                    <th>
+                        <span class="text-black">
+                            Username
+                        </span>
+                    </th>
+                    <th>
+                        <span class="text-black">
+                            Email
+                        </span>
+                    </th>
+                    <th>
+                        <span class="text-black">
+                            Phone Number
+                        </span>
+                    </th>
+                    <th>
+                        <span class="text-black">
+                           Status
+                        </span>
+                    </th>
+                    <th>
+                        <span class="text-black">
+                            Actions
+                        </span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var u in Model)
+                    {
+                        <tr>
+                            <td class="!p-4">@u.FullName</td>
+                            <td class="!p-4">@u.Username</td>
+                            <td class="!p-4">@u.Email</td>
+                            <td class="!p-4">@u.PhoneNumber</td>
+                            <td class ="!p-4">@u.Status</td>
+                            <td class="!p-4">Edit | Delete</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+
+    if (document.getElementById("search-table") && typeof simpleDatatables.DataTable !== 'undefined') {
+        const dataTable = new simpleDatatables.DataTable("#search-table", {
+            searchable: true,
+            sortable: false
+        });
+    }
+</script>
