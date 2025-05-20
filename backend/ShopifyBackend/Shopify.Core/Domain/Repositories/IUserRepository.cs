@@ -16,6 +16,6 @@ namespace Shopify.Core.Domain.Repositories
         public Task<User> GetUserByEmailID(string email);
         public Task<IEnumerable<User>> GetAllCustomers();
         public Task<IEnumerable<User>> GetAllEmployees();
-        public Task<bool> ResetNewUserPassword(string email,string password,UserStatusEnum status);
+        public Task<bool> ResetNewUserPassword(string email, string password, UserStatusEnum status);
     }
 }

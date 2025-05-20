@@ -37,5 +37,19 @@ namespace Shopify.Core.Repositories
                 return null;
             }
         }
+
+        public async Task<Product> AddProduct(Product product)
+        {
+            try
+            {
+                await Context.Products.AddAsync(product);
+                return product;
+            }
+            catch (Exception error)
+            {
+                _logger.LogError("GetProductById::Database exception: {0}", error);
+                return null;
+            }
+        }
     }
 }

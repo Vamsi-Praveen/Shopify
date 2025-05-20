@@ -12,5 +12,7 @@ namespace Shopify.Core.Domain.Repositories
         public Task<IEnumerable<Product>> GetAllProductsList();
 
         public Task<Product> GetProductById(Guid productId);
+
+        public Task<Product> AddProduct(Product product);
     }
 }

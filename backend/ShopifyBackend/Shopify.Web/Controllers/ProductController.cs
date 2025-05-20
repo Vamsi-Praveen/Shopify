@@ -27,6 +27,18 @@ namespace Shopify.Web.Controllers
 
             return View(productView);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(Product product)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(product);
+            }
+            return View();
+            
+
+        }
         public IActionResult Images()
         {
             return View();

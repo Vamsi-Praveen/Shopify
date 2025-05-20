@@ -91,5 +91,24 @@ namespace Shopify.Core.Repositories
                 return null;
             }
         }
+
+        public async Task<bool> ResetNewUserPassword(string email, string password, UserStatusEnum status)
+        {
+            try
+            {
+                var userInDb = await GetUserByEmailID(email);
+                userInDb.PasswordHash = password;
+                userInDb.Status = status.ToString();
+
+                Context.Users.Update(userInDb);
+                await Context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception err)
+            {
+                _logger.LogError("ResetNewUserPassword::Database exception: {0}", err);
+                return false;
+            }
+        }
     }
 }
