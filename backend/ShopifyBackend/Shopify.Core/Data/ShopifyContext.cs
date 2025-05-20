@@ -42,6 +42,10 @@ public partial class ShopifyContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseNpgsql("Host=ep-spring-truth-a4kvogka-pooler.us-east-1.aws.neon.tech;Database=Shopify;Username=neondb_owner;Password=npg_sAyzn06fBKUt;SSL Mode=Require;Trust Server Certificate=true");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresExtension("uuid-ossp");
@@ -437,6 +441,9 @@ public partial class ShopifyContext : DbContext
                 .HasMaxLength(100)
                 .HasComment("Stock Keeping Unit")
                 .HasColumnName("sku");
+            entity.Property(e => e.ThumbnailImage)
+                .HasMaxLength(500)
+                .HasColumnName("thumbnail_image");
             entity.Property(e => e.UnitOfMeasure)
                 .HasMaxLength(50)
                 .HasComment("e.g., kg, g, piece, liter, pack")
@@ -603,7 +610,7 @@ public partial class ShopifyContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("role");
             entity.Property(e => e.Status)
-                .HasColumnType("character varying")
+                .HasMaxLength(20)
                 .HasColumnName("status");
             entity.Property(e => e.UpdatedAt)
                 .HasDefaultValueSql("now()")
