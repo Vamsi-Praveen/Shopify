@@ -139,6 +139,9 @@ _UpgradeReport_Files/
 *.config
 *.secrets.json
 
+!nlog.config
+
+
 # IDE files
 .idea/
 
