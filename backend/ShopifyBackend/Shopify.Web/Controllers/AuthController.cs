@@ -92,7 +92,14 @@ namespace Shopify.Web.Controllers
 
         public IActionResult ResetPassword()
         {
-            return View(new ResetPasswordViewModel());
+            var email = TempData["UserResetEmail"]?.ToString();
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login");
+            }
+            TempData["UserResetEmail"] = email;
+
+            return View(new ResetPasswordViewModel { Email = email });
         }
 
         [HttpPost]
