@@ -5,6 +5,8 @@ using Shopify.Core.Domain.Repositories;
 using Shopify.Core.Domain.Services;
 using Shopify.Core.Repositories;
 using Shopify.Core.Services;
+using NLog;
+using NLog.Web;
 
 namespace Shopify.Web
 {
@@ -12,7 +14,12 @@ namespace Shopify.Web
     {
         public static void Main(string[] args)
         {
+            var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+            logger.Info("Init main");
+
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Host.UseNLog();
 
             //Database Configuration
             //builder.Services.AddDbContext<AppDbContext>(options =>
@@ -25,6 +32,7 @@ namespace Shopify.Web
                 options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres"));
             });
 
+            builder.Services.AddScoped<Microsoft.Extensions.Logging.ILogger, Microsoft.Extensions.Logging.Logger<UnitOfWork>>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IProductService, ProductService>();
@@ -51,6 +59,8 @@ namespace Shopify.Web
             });
 
             var app = builder.Build();
+
+            logger.Info("Application build successful");
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
