@@ -21,8 +21,6 @@ public partial class User
 
     public DateOnly? DateOfBirth { get; set; }
 
-    public bool? IsActive { get; set; }
-
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
@@ -30,6 +28,8 @@ public partial class User
     public DateTime? LastLogin { get; set; }
 
     public string Role { get; set; } = null!;
+
+    public string Status { get; set; } = null!;
 
     public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
 
