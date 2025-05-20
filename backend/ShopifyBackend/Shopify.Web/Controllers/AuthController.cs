@@ -48,6 +48,7 @@ namespace Shopify.Web.Controllers
 
             if(userData.Status == UserStatusEnum.NEW.ToString())
             {
+                TempData["UserResetEmail"] = user.Email;
                 return RedirectToAction("ResetPassword");
             }
 
@@ -102,13 +103,18 @@ namespace Shopify.Web.Controllers
                 return View(model);
             }
 
-            if (model.NewPassword != model.ConfirmPassword)
+            var password_hash = BCrypt.Net.BCrypt.HashPassword(model.NewPassword,12);
+            var resetPassword = await _userService.ResetNewUserPassword(model.Email, password_hash,UserStatusEnum.ACTIVE);
+
+            if (!resetPassword.Success)
             {
-                model.ErrorMessage = "Password's must be same";
+                TempData["ModalType"] = "Error";
+                TempData["ModalTitle"] = "Failed to Reset Password";
+                TempData["ModalMessage"] = $"{resetPassword.Message}";
                 return View(model);
             }
 
-            return View(model);
+            return RedirectToAction("Login");
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Shopify.Core.Communication;
 using Shopify.Core.Data;
 using Shopify.Core.Domain.Repositories;
 using Shopify.Core.Entities;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Shopify.Core.Repositories
 {
@@ -89,6 +91,25 @@ namespace Shopify.Core.Repositories
             {
                 _logger.LogError("GetAllEmployees::Database exception: {0}", error);
                 return null;
+            }
+        }
+
+        public async Task<bool> ResetNewUserPassword(string email,string password,UserStatusEnum status)
+        {
+            try
+            {
+                var userInDb = await GetUserByEmailID(email);
+                userInDb.PasswordHash = password;
+                userInDb.Status = status.ToString();
+
+                Context.Users.Update(userInDb);
+                await Context.SaveChangesAsync();
+                return true;
+            }
+            catch(Exception err)
+            {
+                _logger.LogError("ResetNewUserPassword::Database exception: {0}", err);
+                return false;
             }
         }
     }

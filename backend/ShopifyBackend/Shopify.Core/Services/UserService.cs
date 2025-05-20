@@ -1,8 +1,10 @@
 ﻿using BCrypt.Net;
+using Microsoft.Extensions.Logging;
 using Shopify.Core.Communication;
 using Shopify.Core.Domain.Repositories;
 using Shopify.Core.Domain.Services;
 using Shopify.Core.Entities;
+using Shopify.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +16,11 @@ namespace Shopify.Core.Services
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public UserService(IUnitOfWork unitOfWork)
+        private readonly ILogger<UserService> _logger;
+        public UserService(IUnitOfWork unitOfWork, ILogger<UserService> logger)
         {
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<User>> ListAllUsersAsync()
@@ -88,6 +92,27 @@ namespace Shopify.Core.Services
                 return new ServiceResult(true, "Verification Successful");
             }
             return new ServiceResult(false, "Incorrect Password");
+        }
+
+        public async Task<ServiceResult> ResetNewUserPassword(string email,string password, UserStatusEnum status)
+        {
+            try
+            {
+                var reset = await _unitOfWork.User.ResetNewUserPassword(email, password,status);
+                if (reset)
+                {
+                    return new ServiceResult(true, "Password reseted, Please Login to continue");
+                }
+                else
+                {
+                    return new ServiceResult(false, "Failed to reset password");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResult(false, "Failed to reset password");
+            }
         }
     }
 }

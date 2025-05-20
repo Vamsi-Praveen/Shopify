@@ -1,5 +1,6 @@
 ﻿using Shopify.Core.Communication;
 using Shopify.Core.Entities;
+using Shopify.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace Shopify.Core.Domain.Services
         public Task<bool> CreateUser(User newUser);
         public Task<bool> UpdateUser(User newUserData);
         public Task<User> GetUserByEmail(string email);
-
         public Task<ServiceResult> VerifyUserLogin(string email, string password);
+        public Task<ServiceResult> ResetNewUserPassword(string email,string password,UserStatusEnum status);
     }
 }

@@ -4,6 +4,7 @@ using Shopify.Core.Domain.Services;
 using Shopify.Core.Entities;
 using Shopify.Core.Enums;
 using Shopify.Web.DTO;
+using Shopify.Web.Models;
 
 namespace Shopify.Web.Controllers
 {
@@ -58,6 +59,50 @@ namespace Shopify.Web.Controllers
             }
 
             return RedirectToAction("Add", "Employee");
+        }
+
+
+        public IActionResult Reset()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Reset(ResetEmployeePassword model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var isUserExists = await _userService.GetUserByEmail(model.Email);
+
+            if (isUserExists == null)
+            {
+                TempData["ModalType"] = "Error";
+                TempData["ModalTitle"] = "No User Found";
+                TempData["ModalMessage"] = $"User with given email address is not found.";
+                return View(model);
+            }
+
+            var resetPassword = await _userService.ResetNewUserPassword(model.Email, "$2a$12$V2FPj/Zbv8IPfQhUTiet.uX1oGRJ48Z2HMY94.lJRdrZ9qikA9vYC",UserStatusEnum.NEW);
+
+            if (!resetPassword.Success)
+            {
+                TempData["ModalType"] = "Error";
+                TempData["ModalTitle"] = "Failed to Reset Password";
+                TempData["ModalMessage"] = $"{resetPassword.Message}";
+            }
+            else
+            {
+                TempData["ModalType"] = "Success";
+                TempData["ModalTitle"] = "Password Reset Successfull";
+                TempData["ModalMessage"] = "You can now login with default user and reset the password.";
+            }
+
+            return RedirectToAction("Reset", "Employee");
+
+
         }
     }
 }
