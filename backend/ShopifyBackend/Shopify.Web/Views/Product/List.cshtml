@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Shopify.Web.Models.ProductViewModel>;
+﻿@model IEnumerable<Shopify.Core.Entities.Product>;
 @{
     ViewData["Title"] = "Products";
     bool showModal = TempData["ModalMessage"] != null && TempData["ModalTitle"] != null && TempData["ModalType"] != null;
@@ -74,8 +74,8 @@
                             </td>
                             <td class="!p-4">@u.Name</td>
                             <td class="!p-4">@u.Description</td>
-                            <td class="!p-4">@u.CategoryId</td>
-                            <td class="!p-4">@u.BrandId</td>
+                            <td class="!p-4">@u.Category.Name</td>
+                            <td class="!p-4">@u.Brand.Name</td>
                             <td class="!p-4">View Product</td>
                         </tr>
                     }
