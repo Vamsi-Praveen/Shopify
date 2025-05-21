@@ -1,4 +1,4 @@
-﻿@model Shopify.Web.Models.BrandViewModel;
+﻿@model Shopify.Web.Models.BrandViewModel
 @{
     ViewData["Title"] = "Product Brands";
     bool showModal = TempData["ModalMessage"] != null && TempData["ModalTitle"] != null && TempData["ModalType"] != null;
@@ -115,18 +115,18 @@
             <p class="text-sm text-gray-500">Create new product brand</p>
         </div>
         <div>
-            <form method="post" asp-action="Brands" class="space-y-3">
+            <form method="post" asp-action="Brands" enctype="multipart/form-data" class="space-y-3">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Brand Name</label>
-                    <input type="text" placeholder="e.g. Amul" asp-for="Brand.Name"
+                    <input type="text" placeholder="e.g. Amul" asp-for="@Model.Name"
                            class="w-full px-3 py-2 border border-gray-200 rounded-sm outline-none" />
-                    <span asp-validation-for="Brand.Name" class="text-red-500 text-sm"></span>
+                    <span asp-validation-for="@Model.Name" class="text-red-500 text-sm"></span>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Brand Description</label>
-                    <textarea rows="5" placeholder="Enter Description" asp-for="Brand.Description"
+                    <textarea rows="5" placeholder="Enter Description" asp-for="@Model.Description"
                               class="w-full px-3 py-2 border border-gray-200 rounded-sm outline-none"></textarea>
-                    <span asp-validation-for="Brand.Description" class="text-red-500 text-sm"></span>
+                    <span asp-validation-for="@Model.Description" class="text-red-500 text-sm"></span>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Brand Logo (Optional)</label>
@@ -141,10 +141,10 @@
                         </div>
 
                         <div class="flex-grow">
-                            <label for="thumbnail-upload" class="cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+                            <label for="thumbnail-upload" name="ThumbnailFile" asp-for="ThumbnailFile" class="cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
                                 <span>Upload a file</span>
                             </label>
-                            <input id="thumbnail-upload" name="thumbnailFile" type="file" class="sr-only" accept="image/png, image/jpeg, image/gif, image/webp">
+                            <input id="thumbnail-upload" name="ThumbnailFile" asp-for="ThumbnailFile" type="file" class="sr-only" accept="image/png, image/jpeg, image/gif, image/webp">
                             <p class="text-xs text-gray-500 mt-4">PNG, JPG, GIF, WEBP up to 2MB.</p>
                             <p id="thumbnail-filename" class="text-sm text-gray-700 mt-1"></p>
                         </div>
