@@ -123,5 +123,10 @@ namespace Shopify.Web.Controllers
 
             return RedirectToAction("Login");
         }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }

@@ -8,7 +8,7 @@ using Shopify.Web.Models;
 
 namespace Shopify.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class EmployeeController : Controller
     {
         private readonly IUserService _userService;

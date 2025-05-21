@@ -47,6 +47,7 @@ namespace Shopify.Web
                 {
                     options.LoginPath = "/auth/login";
                     options.LogoutPath = "/auth/logout";
+                    options.AccessDeniedPath = "/auth/accessdenied";
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
                     options.SlidingExpiration = true;
                 });
