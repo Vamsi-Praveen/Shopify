@@ -75,5 +75,18 @@ namespace Shopify.Core.Services
                 return false;
             }
         }
+
+        public async Task<IEnumerable<Product>> GetAllProductsAsync()
+        {
+            try
+            {
+                var allProducts = await _unitOfWork.Product.GetAllProductsList();
+                return allProducts;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

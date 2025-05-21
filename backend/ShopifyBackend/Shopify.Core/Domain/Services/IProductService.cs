@@ -12,5 +12,7 @@ namespace Shopify.Core.Domain.Services
         public Task<bool> CreateProduct(Product product);
         public Task<bool> UpdateProduct(Product product);
         public Task<bool> DeleteProduct(Guid productId);
+
+        public Task<IEnumerable<Product>> GetAllProductsAsync();
     }
 }

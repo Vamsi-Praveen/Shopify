@@ -28,5 +28,9 @@ namespace Shopify.Web.Models
         public bool IsFeatured { get; set; }
 
         public IFormFile? ThumbnailImage { get; set; }
+
+        public string? CategoryName { get; set; }
+
+        public string? BrandName { get; set; }
     }
 }

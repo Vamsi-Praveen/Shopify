@@ -1,0 +1,96 @@
+﻿@model IEnumerable<Shopify.Web.Models.ProductViewModel>;
+@{
+    ViewData["Title"] = "Products";
+    bool showModal = TempData["ModalMessage"] != null && TempData["ModalTitle"] != null && TempData["ModalType"] != null;
+}
+<link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+
+@section Scripts {
+    @if (showModal)
+    {
+        <script>
+            openModal('@TempData["ModalType"]','@TempData["ModalTitle"]','@TempData["ModalMessage"]');
+        </script>
+    }
+}
+
+<div class="p-4 space-y-6">
+    <div class="flex items-center justify-between items-start gap-3">
+        <div>
+            <h1 class="text-2xl font-semibold text-gray-800">Products</h1>
+            <p class="text-sm text-gray-500">Manage all your products.</p>
+        </div>
+        <div>
+            <a asp-action="Add"
+               class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 border border-transparent rounded-sm cursor-pointer shadow-sm hover:bg-emerald-700 flex items-center gap-2">
+                <i class="ph ph-plus-circle text-lg"></i>
+                Add New Product
+            </a>
+        </div>
+    </div>
+    <div>
+        <table id="search-table" class="table-auto w-full text-left text-sm text-gray-700 border-collapse">
+            <thead>
+                <tr>
+                    <th>
+                        <span class="text-black">
+                            Product Image
+                        </span>
+                    </th>
+                    <th>
+                        <span class="text-black">
+                            Product Name
+                        </span>
+                    </th>
+                    <th>
+                        <span class="text-black">
+                            Product Description
+                        </span>
+                    </th>
+                    <th>
+                        <span class="text-black">
+                            Category Name
+                        </span>
+                    </th>
+                    <th>
+                        <span class="text-black">
+                            Brand Name
+                        </span>
+                    </th>
+                    <th>
+                        <span class="text-black">
+                            Action
+                        </span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var u in Model)
+                    {
+                        <tr>
+                            <td class="!p-4">
+                                <img src="@u.ThumbnailImage" alt="Product" class="size-20 object-contain"/>
+                            </td>
+                            <td class="!p-4">@u.Name</td>
+                            <td class="!p-4">@u.Description</td>
+                            <td class="!p-4">@u.CategoryId</td>
+                            <td class="!p-4">@u.BrandId</td>
+                            <td class="!p-4">View Product</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+
+    if (document.getElementById("search-table") && typeof simpleDatatables.DataTable !== 'undefined') {
+        const dataTable = new simpleDatatables.DataTable("#search-table", {
+            searchable: true,
+            sortable: false
+        });
+    }
+</script>

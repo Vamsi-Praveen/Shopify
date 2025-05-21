@@ -5,6 +5,7 @@ using Shopify.Core.Entities;
 using Shopify.Core.Utilities;
 using Shopify.Web.DTO;
 using Shopify.Web.Models;
+using System.Threading.Tasks;
 
 namespace Shopify.Web.Controllers
 {
@@ -97,6 +98,12 @@ namespace Shopify.Web.Controllers
         public IActionResult Images()
         {
             return View();
+        }
+
+        public async Task<IActionResult> List()
+        {
+            var allProducts = await productService.GetAllProductsAsync(); 
+            return View(allProducts);
         }
 
         public async Task<IActionResult> Brands()
