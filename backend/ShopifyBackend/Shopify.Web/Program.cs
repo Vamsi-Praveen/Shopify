@@ -39,6 +39,7 @@ namespace Shopify.Web
                 builder.Services.AddScoped<IUserService, UserService>();
                 builder.Services.AddScoped<IProductService, ProductService>();
                 builder.Services.AddScoped<IBrandService, BrandService>();
+                builder.Services.AddScoped<ICategoryService, CategoryService>();
 
                 builder.Services.AddSingleton<AzureBlobService>();
 
