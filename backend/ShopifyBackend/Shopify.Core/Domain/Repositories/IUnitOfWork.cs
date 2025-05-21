@@ -18,6 +18,8 @@ namespace Shopify.Core.Domain.Repositories
 
         IBrandsRepository Brands { get; }
 
+        ICategoryRepository Category { get; }
+
         Task<int> SaveAsync();
 
         void DisableDetectChanges();

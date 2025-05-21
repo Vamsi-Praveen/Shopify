@@ -20,6 +20,7 @@ namespace Shopify.Core.Repositories
         private IProductImagesRepository _productImages;
         private IProductReviewRepository _productReviews;
         private IBrandsRepository _brands;
+        private ICategoryRepository _category;
 
         public UnitOfWork(ShopifyContext shopifyContext, ILogger<UnitOfWork> Logger)
         {
@@ -50,6 +51,11 @@ namespace Shopify.Core.Repositories
         public IBrandsRepository Brands
         {
             get { return _brands = _brands ?? new BrandsRepository(_shopifyContext, _logger); }
+        }
+
+        public ICategoryRepository Category
+        {
+            get { return _category = _category ?? new CategoryRepository(_shopifyContext, _logger); }
         }
 
         public async Task<int> SaveAsync()
