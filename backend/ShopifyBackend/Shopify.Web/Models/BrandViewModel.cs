@@ -1,10 +1,16 @@
 ﻿using Shopify.Core.Entities;
+using Shopify.Web.DTO;
 
 namespace Shopify.Web.Models
 {
     public class BrandViewModel
     {
         public IEnumerable<Brand> Brands;
-        public Brand Brand;
+        
+        public string Name { get; set; } = null!;
+
+        public IFormFile? ThumbnailFile { get; set; }
+
+        public string? Description { get; set; }
     }
 }

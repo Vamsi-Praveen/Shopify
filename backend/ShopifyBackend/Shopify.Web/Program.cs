@@ -7,6 +7,7 @@ using Shopify.Core.Repositories;
 using Shopify.Core.Services;
 using NLog;
 using NLog.Web;
+using Shopify.Core.Utilities;
 
 namespace Shopify.Web
 {
@@ -38,6 +39,9 @@ namespace Shopify.Web
                 builder.Services.AddScoped<IUserService, UserService>();
                 builder.Services.AddScoped<IProductService, ProductService>();
                 builder.Services.AddScoped<IBrandService, BrandService>();
+
+                builder.Services.AddSingleton<AzureBlobService>();
+
 
                 // Add services to the container.
                 builder.Services.AddControllersWithViews();

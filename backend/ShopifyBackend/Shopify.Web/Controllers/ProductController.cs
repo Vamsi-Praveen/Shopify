@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Shopify.Core.Domain.Services;
 using Shopify.Core.Entities;
+using Shopify.Core.Utilities;
+using Shopify.Web.DTO;
 using Shopify.Web.Models;
 
 namespace Shopify.Web.Controllers
@@ -10,10 +12,12 @@ namespace Shopify.Web.Controllers
     public class ProductController : Controller
     {
         private readonly IBrandService brandService;
+        private readonly AzureBlobService _blobService;
 
-        public ProductController(IBrandService brandService)
+        public ProductController(IBrandService brandService, AzureBlobService blobService)
         {
             this.brandService = brandService;
+            this._blobService = blobService;
         }
 
         public async Task<IActionResult> Add()
@@ -49,8 +53,7 @@ namespace Shopify.Web.Controllers
             var allBrands = await brandService.GetAllBrandsAsync();
             var brandViewModel = new BrandViewModel()
             {
-                Brands = allBrands,
-                Brand = new Brand()
+                Brands = allBrands
             };
             return View(brandViewModel);
         }
@@ -62,7 +65,7 @@ namespace Shopify.Web.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Brands(Brand brand)
+        public async Task<IActionResult> Brands(BrandViewModel brandDto)
         {
             if (!ModelState.IsValid)
             {
@@ -70,10 +73,27 @@ namespace Shopify.Web.Controllers
                 TempData["OpenModal"] = true;
                 return View(new BrandViewModel
                 {
-                    Brand = brand,
                     Brands = brands
                 });
             }
+
+            var imageUrl = await _blobService.UploadImageAsync(brandDto.ThumbnailFile);
+
+            if (imageUrl == null)
+            {
+                TempData["ModalType"] = "ERROR";
+                TempData["ModalTitle"] = "Creation Failed";
+                TempData["ModalMessage"] = "Could add image to our DB.";
+                return RedirectToAction("Brands", "Product");
+            }
+
+            Brand brand = new Brand()
+            {
+                Id = Guid.NewGuid(),
+                Name = brandDto.Name,
+                Description = brandDto.Description,
+                LogoUrl = imageUrl
+            };
 
             bool isSuccess = await brandService.CreateBrand(brand);
 
