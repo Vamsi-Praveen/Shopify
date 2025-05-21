@@ -12,35 +12,86 @@ namespace Shopify.Web.Controllers
     public class ProductController : Controller
     {
         private readonly IBrandService brandService;
+        private readonly ICategoryService categoryService;
+        private readonly IProductService productService;
         private readonly AzureBlobService _blobService;
 
-        public ProductController(IBrandService brandService, AzureBlobService blobService)
+        public ProductController(IBrandService brandService, AzureBlobService blobService,ICategoryService categoryService, IProductService productService)
         {
             this.brandService = brandService;
             this._blobService = blobService;
+            this.categoryService = categoryService;
+            this.productService = productService;
         }
 
         public async Task<IActionResult> Add()
         {
             var allBrands = await brandService.GetAllBrandsAsync();
+            var allCategories = await categoryService.GetAllCategoriesAsync();
             var productView = new ProductViewModel()
             {
                 brands = allBrands.Where(b => b.IsActive == true),
-                categories = []
+                categories = allCategories.Where(b => b.IsActive == true)
             };
 
             return View(productView);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Product product)
+        public async Task<IActionResult> Add(ProductViewModel product)
         {
+            var allBrands = await brandService.GetAllBrandsAsync();
+            var allCategories = await categoryService.GetAllCategoriesAsync();
+            product.brands = allBrands.Where(b=>b.IsActive == true);
+            product.categories = allCategories.Where(b => b.IsActive == true);
             if (!ModelState.IsValid)
             {
                 return View(product);
             }
-            return View();
-            
+
+            var imageUrl = await _blobService.UploadImageAsync(product.ThumbnailImage);
+
+            if (imageUrl == null)
+            {
+                TempData["ModalType"] = "ERROR";
+                TempData["ModalTitle"] = "Creation Failed";
+                TempData["ModalMessage"] = "Could add image to our DB.";
+                return RedirectToAction("Brands", "Product");
+            }
+
+
+            var newProduct = new Product()
+            {
+                Name = product.Name,
+                Description = product.Description,
+                ShortDescription = product.ShortDescription,
+                IsFeatured = product.IsFeatured,
+                ThumbnailImage = imageUrl,
+                Sku = product.Sku,
+                SellingPrice = product.SellingPrice,
+                BasePrice = product.BasePrice,
+                CategoryId = product.CategoryId,
+                BrandId = product.BrandId,
+                UnitOfMeasure = product.UnitOfMeasure
+            };
+
+            bool isSuccess = await productService.CreateProduct(newProduct);
+
+            if (isSuccess)
+            {
+                TempData["ModalType"] = "Success";
+                TempData["ModalTitle"] = "Product Created!";
+                TempData["ModalMessage"] = $"Brand {product.Name} has been created successfully.";
+            }
+            else
+            {
+                TempData["ModalType"] = "ERROR";
+                TempData["ModalTitle"] = "Creation Failed";
+                TempData["ModalMessage"] = "Could not create the user due to an unexpected error. Please check the details and try again, or contact support.";
+            }
+
+            return RedirectToAction("Add", "Product");
+
 
         }
         public IActionResult Images()

@@ -23,6 +23,7 @@ namespace Shopify.Core.Services
             try
             {
                 await _unitOfWork.Product.AddProduct(product);
+                await _unitOfWork.SaveAsync();
                 return true;
             }
             catch (Exception ex)
