@@ -102,5 +102,19 @@ namespace Shopify.Core.Services
                 return null;
             }
         }
+
+
+        public async Task<IEnumerable<string>> GetAllProductImages(Guid productId)
+        {
+            try
+            {
+                var resultProducts = await _unitOfWork.ProductImages.GetProductUrlsByProductId(productId);
+                return resultProducts;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

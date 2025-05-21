@@ -178,5 +178,12 @@ namespace Shopify.Web.Controllers
             var products = await productService.SearchProductByName(productName);
             return products;
         }
+
+        [HttpGet]
+        public async Task<IEnumerable<string>> GetProductImages(Guid productId)
+        {
+            var productImages = await productService.GetAllProductImages(productId);
+            return productImages;
+        }
     }
 }

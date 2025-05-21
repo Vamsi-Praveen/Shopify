@@ -10,5 +10,6 @@ namespace Shopify.Core.Domain.Repositories
     public interface IProductImagesRepository : IGenericRepository<Productimage>
     {
         public Task<List<Productimage>> GetProductImagesByProductId(Guid productId);
+        public Task<IEnumerable<string>> GetProductUrlsByProductId(Guid productId);
     }
 }
