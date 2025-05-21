@@ -79,8 +79,8 @@ namespace Shopify.Core.Services
         public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
             try
-            {
-                var allProducts = await _unitOfWork.Product.GetAllProductsList();
+            {                
+                var allProducts = await _unitOfWork.Product.GetAllProductsDetails();
                 return allProducts;
             }
             catch (Exception ex)

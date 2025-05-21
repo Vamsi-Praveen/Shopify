@@ -25,6 +25,12 @@ namespace Shopify.Core.Repositories
             return await Context.Products.ToListAsync();
         }
 
+
+        public async Task<IEnumerable<Product>> GetAllProductsDetails()
+        {
+            return await Context.Products.Include(p => p.Category).Include(p=> p.Brand).ToListAsync();
+        }
+
         public async Task<Product> GetProductById(Guid productId)
         {
             try
