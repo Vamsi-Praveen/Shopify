@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shopify.Core.Domain.Services;
+using Shopify.Core.DTOs;
 using Shopify.Core.Entities;
 using Shopify.Core.Utilities;
 using Shopify.Web.DTO;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Shopify.Web.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class ProductController : Controller
     {
         private readonly IBrandService brandService;
@@ -169,6 +170,13 @@ namespace Shopify.Web.Controllers
             }
 
             return RedirectToAction("Brands", "Product");
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<ProductLookupDto>> SearchProduct(string productName)
+        {
+            var products = await productService.SearchProductByName(productName);
+            return products;
         }
     }
 }

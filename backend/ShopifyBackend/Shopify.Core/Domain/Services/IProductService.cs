@@ -1,4 +1,5 @@
-﻿using Shopify.Core.Entities;
+﻿using Shopify.Core.DTOs;
+using Shopify.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace Shopify.Core.Domain.Services
         public Task<bool> DeleteProduct(Guid productId);
 
         public Task<IEnumerable<Product>> GetAllProductsAsync();
+
+        public Task<IEnumerable<ProductLookupDto>> SearchProductByName(string name);
     }
 }

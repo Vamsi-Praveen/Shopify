@@ -1,5 +1,6 @@
 ﻿using Shopify.Core.Domain.Repositories;
 using Shopify.Core.Domain.Services;
+using Shopify.Core.DTOs;
 using Shopify.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -82,6 +83,19 @@ namespace Shopify.Core.Services
             {                
                 var allProducts = await _unitOfWork.Product.GetAllProductsDetails();
                 return allProducts;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<ProductLookupDto>> SearchProductByName(string name)
+        {
+            try
+            {
+                var resultProducts = await _unitOfWork.Product.SearchProductsByNameAsync(name);
+                return resultProducts;
             }
             catch (Exception ex)
             {

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Shopify.Core.Data;
 using Shopify.Core.Domain.Repositories;
+using Shopify.Core.DTOs;
 using Shopify.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -57,5 +58,26 @@ namespace Shopify.Core.Repositories
                 return null;
             }
         }
+
+        public async Task<IEnumerable<ProductLookupDto>> SearchProductsByNameAsync(string searchTerm)
+        {
+            try
+            {
+                return await Context.Products
+                .Where(p => p.Name.ToLower().Contains(searchTerm))
+                .Select(p => new ProductLookupDto
+                {
+                    Id = p.Id,
+                    Name = p.Name
+                })
+                .ToListAsync();
+            }
+            catch (Exception error)
+            {
+                _logger.LogError("SearchProductsByNameAsync::Database exception: {0}", error);
+                return null;
+            }
+        }
+
     }
 }
