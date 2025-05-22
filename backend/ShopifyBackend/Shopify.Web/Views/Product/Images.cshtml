@@ -8,10 +8,10 @@
         <p class="text-sm text-gray-500">Add images to product</p>
     </div>
     <div class="bg-white p-4 pl-6 border border-gray-200 rounded-[5px] shadow-sm w-1/2">
-        <form method="post" class="space-y-5">
+        <div class="space-y-5">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
-                <input type="text" placeholder="e.g. Dairymilk" id="productName"
+                <input type="text" placeholder="e.g. Dairymilk" id="productName" autocomplete="off" spellcheck="false"
                        class="w-full px-3 py-2 border border-gray-200 rounded-sm outline-none" />
                 <span class="text-red-500 text-sm"></span>
                 <div>
@@ -19,16 +19,20 @@
                 </div>
             </div>
             <div class="flex justify-end">
-                <button type="submit"
+                <button
+                    onclick="getImages()"
                         class="bg-emerald-600 hover:bg-emerald-700 transition text-white rounded-sm px-4 py-2 cursor-pointer flex items-center gap-3">
                     <i class="ph ph-swap text-lg"></i>
                     Get Images
                 </button>
             </div>
-        </form>
+        </div>
     </div>
+    <div class="bg-white p-4 pl-6 border-bottom border-gray-200 rounded-[5px] shadow-sm hidden flex flex-wrap gap-4" id="image-container"></div>
 </div>
 <script>
+    let selectedProductId = null;
+    const imageContainer = document.getElementById("image-container");
     document.addEventListener("DOMContentLoaded",()=>{
         const productInput = document.getElementById("productName");
         const suggestionBox = document.getElementById("suggestion");
@@ -59,10 +63,17 @@
                         li.className = "px-3 py-2 hover:bg-gray-200 cursor-pointer text-sm text-gray-700";
                         li.addEventListener("click", () => {
                             productInput.value = li.textContent;
+                            selectedProductId = product.id;
                             suggestionBox.innerHTML = '';
                         });
                         suggestionBox.appendChild(li);
                     });
+                }
+                else if(query.length>1){
+                     const li = document.createElement("li");
+                     li.textContent = "No Products Found";
+                     li.className = "px-3 py-2 hover:bg-gray-200 cursor-pointer text-sm text-gray-700";
+                     suggestionBox.appendChild(li);
                 }
                 
             } catch (error) {
@@ -72,9 +83,44 @@
 
         productInput.addEventListener("input", debounce((e) => {
             const query = e.target.value.trim();
-            fetchMatchingProducts(query);
-        }, 100));
-
+            if(query.length){
+                fetchMatchingProducts(query);
+            }else{
+                suggestionBox.innerHTML = '';
+            }
+        }, 300));
 
     })
+    async function getImages(){
+        try{
+            const response = await fetch(`/Product/GetProductImages?productId=${encodeURIComponent(selectedProductId)}`);
+            if (!response.ok) throw new Error("Network error");
+
+            const productImages = await response.json();
+
+            if(productImages.length>0){
+                productImages.map((img)=>{
+                    const imgEl = document.createElement("img");
+                    const div = document.createElement("div");
+                    div.className = "w-50 h-50 p-2 border border-gray-200 rounded-sm shadow-sm relative";
+                    const innerDiv = document.createElement("div");
+                    innerDiv.className = "absolute rounded-full bg-gray-500 w-5 h-5 top-2 right-2 z-10 flex items-center justify-center cursor-pointer";
+                    innerDiv.innerHTML = "<i class='ph-bold ph-x text-white text-sm'></i>"
+                    imgEl.src = img;
+                    imgEl.className = "w-full h-full object-contain";
+                    div.appendChild(innerDiv);
+                    div.appendChild(imgEl);
+                    imageContainer.appendChild(div);
+                    imageContainer.classList.remove("hidden");
+                })
+            }
+            const addImgDiv = document.createElement("div");
+            addImgDiv.className = "w-50 h-50 p-3 border border-dashed border-gray-300 border-2 rounded-sm flex items-center justify-center cursor-pointer bg-gray-100 hover:bg-gray-200";
+            addImgDiv.innerHTML = "<i class='ph-bold ph-plus text-4xl'></i>";
+            imageContainer.appendChild(addImgDiv);
+
+        }catch(err){
+            console.error("Error fetching products:", err);
+        }
+        }
 </script>
