@@ -161,7 +161,7 @@ namespace Shopify.Core.Services
                 var res = await _azureBlobService.DeleteImageAsync(imageInDb.ImageUrl);
                 if(!res)
                 {
-                    _logger.LogError($"Unable to delete Product Image from DB - {image.ImageUrl}");
+                    _logger.LogError($"Unable to delete Product Image from DB - {imageInDb.ImageUrl}");
                     return false;
                 }
 
