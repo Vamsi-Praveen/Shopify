@@ -114,5 +114,10 @@ namespace Shopify.Core.Services
                 return new ServiceResult(false, "Failed to reset password");
             }
         }
+
+        public async Task<List<string>> SearchUserByEmail(string email)
+        {
+            return await _unitOfWork.User.SearchUserByEmail(email);
+        }
     }
 }

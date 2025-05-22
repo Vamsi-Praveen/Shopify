@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Shopify.Core.Data;
 using Shopify.Core.Domain.Repositories;
+using Shopify.Core.DTOs;
 using Shopify.Core.Entities;
 using Shopify.Core.Enums;
 using System;
@@ -108,6 +109,22 @@ namespace Shopify.Core.Repositories
             {
                 _logger.LogError("ResetNewUserPassword::Database exception: {0}", err);
                 return false;
+            }
+        }
+
+        public async Task<List<string>> SearchUserByEmail(string email)
+        {
+            try
+            {
+                return await Context.Users
+                .Where(p => p.Email.ToLower().Contains(email))
+                .Select(p => p.Email)
+                .ToListAsync();
+            }
+            catch (Exception error)
+            {
+                _logger.LogError("SearchUserByEmail::Database exception: {0}", error);
+                return null;
             }
         }
     }

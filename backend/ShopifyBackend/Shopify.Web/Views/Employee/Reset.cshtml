@@ -23,9 +23,12 @@
             <form asp-action="Reset" method="post" class="space-y-5">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                    <input asp-for="Email" type="email" placeholder="e.g.johndoe@gmail.com"
+                    <input asp-for="Email" type="text" placeholder="e.g.johndoe@gmail.com" autocomplete="off" id="email-in" spellcheck="false"
                            class="w-full px-3 py-2 border border-gray-200 rounded-sm outline-none" />
                     <span asp-validation-for="Email" class="text-red-500 text-sm"></span>
+                    <div>
+                        <ul id="suggestion" class="bg-gray-100"></ul>
+                    </div>
                 </div>
                 <div class="flex justify-end">
                     <button type="submit"
@@ -38,3 +41,60 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const emailInput = document.getElementById("email-in");
+        const suggestionBox = document.getElementById("suggestion");
+
+        function debounce(fn, delay) {
+            let timeoutId;
+            return function (...args) {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => fn.apply(this, args), delay);
+            };
+        }
+
+        async function fetchMatchingUsers(query) {
+            if (query.length < 2) {
+                suggestionBox.innerHTML = '';
+            }
+
+            try {
+                const response = await fetch(`/Employee/SearchUsers?email=${encodeURIComponent(query)}`);
+                if (!response.ok) throw new Error("Network error");
+
+                const users = await response.json();
+                suggestionBox.innerHTML = '';
+                if (users.length > 0) {
+                    users.forEach(e => {
+                        const li = document.createElement("li");
+                        li.textContent = e;
+                        li.className = "px-3 py-2 hover:bg-gray-200 cursor-pointer text-sm text-gray-700";
+                        li.addEventListener("click", () => {
+                            emailInput.value = li.textContent;
+                            suggestionBox.innerHTML = '';
+                        });
+                        suggestionBox.appendChild(li);
+                    });
+                } else if (query.length > 1) {
+                    const li = document.createElement("li");
+                    li.textContent = "No Users Found";
+                    li.className = "px-3 py-2 hover:bg-gray-200 cursor-pointer text-sm text-gray-700";
+                    suggestionBox.appendChild(li);
+                }
+
+            } catch (error) {
+                console.error("Error fetching Users:", error);
+            }
+        }
+
+        emailInput.addEventListener("input", debounce((e) => {
+            const query = e.target.value.trim();
+            if (query.length) {
+                fetchMatchingUsers(query);
+            } else {
+                suggestionBox.innerHTML = '';
+            }
+        }, 200));
+    });
+</script>

@@ -19,5 +19,6 @@ namespace Shopify.Core.Domain.Services
         public Task<User> GetUserByEmail(string email);
         public Task<ServiceResult> VerifyUserLogin(string email, string password);
         public Task<ServiceResult> ResetNewUserPassword(string email,string password,UserStatusEnum status);
+        public Task<List<string>> SearchUserByEmail(string email);
     }
 }

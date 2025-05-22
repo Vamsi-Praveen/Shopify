@@ -110,5 +110,13 @@ namespace Shopify.Web.Controllers
             var users = await _userService.ListAllUsersAsync();
             return View(users);
         }
+
+
+        [HttpGet]
+        public async Task<List<string>> SearchUsers(string email)
+        {
+            var users = await _userService.SearchUserByEmail(email);
+            return users;
+        }
     }
 }
