@@ -27,8 +27,7 @@ namespace Shopify.Core.Services
         {
             try
             {
-                await _unitOfWork.Category.AddAsync(category);
-                await _unitOfWork.SaveAsync();
+                await _unitOfWork.Category.CreateCategory(category);
                 return true;
             }
             catch (Exception ex)

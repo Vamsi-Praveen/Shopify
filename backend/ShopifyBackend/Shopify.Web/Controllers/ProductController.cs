@@ -117,9 +117,14 @@ namespace Shopify.Web.Controllers
             return View(brandViewModel);
         }
 
-        public IActionResult Categories()
+        public async Task<IActionResult> Categories()
         {
-            return View();
+            var allCategories = await categoryService.GetAllCategoriesAsync();
+            var category = new CategoriesViewModel()
+            {
+                Categories = allCategories
+            };
+            return View(category);
         }
 
 
@@ -215,6 +220,55 @@ namespace Shopify.Web.Controllers
                 return new ServiceResult(true, "Product Image Deleted Successfully");
             }
             return new ServiceResult(false, "Failed to Delete Image");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Categories(CategoriesViewModel category)
+        {
+            if (!ModelState.IsValid)
+            {
+                var categories = await categoryService.GetAllCategoriesAsync();
+                TempData["OpenModal"] = true;
+                return View(new CategoriesViewModel
+                {
+                    Categories= categories
+                });
+            }
+
+            var imageUrl = await _blobService.UploadImageAsync(category.ImageFile);
+
+            if (imageUrl == null)
+            {
+                TempData["ModalType"] = "ERROR";
+                TempData["ModalTitle"] = "Creation Failed";
+                TempData["ModalMessage"] = "Could add image to our DB.";
+                return RedirectToAction("Categories", "Product");
+            }
+
+            Category c = new Category()
+            {
+                Id = Guid.NewGuid(),
+                Name = category.Name,
+                ImageUrl = imageUrl,
+                Description = category.Description,
+            };
+
+            bool isSuccess = await categoryService.CreateCategory(c);
+
+            if (isSuccess)
+            {
+                TempData["ModalType"] = "Success";
+                TempData["ModalTitle"] = "Category Created!";
+                TempData["ModalMessage"] = $"Category {category.Name} has been created successfully.";
+            }
+            else
+            {
+                TempData["ModalType"] = "ERROR";
+                TempData["ModalTitle"] = "Creation Failed";
+                TempData["ModalMessage"] = "Could not create the user due to an unexpected error. Please check the details and try again, or contact support.";
+            }
+
+            return RedirectToAction("Categories", "Product");
         }
     }
 }

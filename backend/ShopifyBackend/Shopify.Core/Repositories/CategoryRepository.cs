@@ -35,5 +35,21 @@ namespace Shopify.Core.Repositories
                 return null;
             }
         }
+
+        public async Task<bool> CreateCategory(Category category)
+        {
+            try
+            {
+                await Context.Categories.AddAsync(category);
+                await Context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception error)
+            {
+                _logger.LogError("CreateCategory::Database exception: {0}", error);
+                return false;
+            }
+        }
     }
+
 }
