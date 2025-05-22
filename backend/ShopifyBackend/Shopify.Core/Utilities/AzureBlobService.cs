@@ -34,5 +34,22 @@ namespace Shopify.Core.Utilities
 
             return blobClient.Uri.ToString(); // <-- Image URL
         }
+        public async Task<bool> DeleteImageAsync(string imageUrl)
+        {
+            try
+            {
+                // Get just the blob name from the full URL
+                Uri uri = new Uri(imageUrl);
+                string blobName = Path.GetFileName(uri.LocalPath);
+
+                var blobClient = _containerClient.GetBlobClient(blobName);
+                return await blobClient.DeleteIfExistsAsync();
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
     }
 }

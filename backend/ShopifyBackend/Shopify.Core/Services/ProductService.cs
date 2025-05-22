@@ -1,22 +1,29 @@
-﻿using Shopify.Core.Domain.Repositories;
+﻿using Microsoft.Extensions.Logging;
+using Shopify.Core.Domain.Repositories;
 using Shopify.Core.Domain.Services;
 using Shopify.Core.DTOs;
 using Shopify.Core.Entities;
+using Shopify.Core.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Shopify.Core.Services
 {
     public class ProductService : IProductService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly AzureBlobService _azureBlobService;
+        private readonly ILogger<ProductService> _logger;
 
-        public ProductService(IUnitOfWork unitOfWork)
+        public ProductService(IUnitOfWork unitOfWork, AzureBlobService azureBlobService, ILogger<ProductService> logger)
         {
             _unitOfWork = unitOfWork;
+            _azureBlobService = azureBlobService;
+            _logger = logger;
         }
 
         public async Task<bool> CreateProduct(Product product)
@@ -60,6 +67,16 @@ namespace Shopify.Core.Services
 
 
                 var productImages = await _unitOfWork.ProductImages.GetProductImagesByProductId(productId);
+                var res = true;
+                foreach (var image in productImages)
+                {
+                    res = await _azureBlobService.DeleteImageAsync(image.ImageUrl);
+                    if(res== false)
+                    {
+                        _logger.LogError($"Unable to delete Product Image from DB - {image.ImageUrl}");
+                        return false;
+                    }
+                }
                 foreach (var review in productImages)
                 {
                     _unitOfWork.ProductImages.Remove(review);
@@ -139,6 +156,15 @@ namespace Shopify.Core.Services
         {
             try
             {
+                var imageInDb = await _unitOfWork.ProductImages.GetProductImageByImageId(imageId);
+
+                var res = await _azureBlobService.DeleteImageAsync(imageInDb.ImageUrl);
+                if(!res)
+                {
+                    _logger.LogError($"Unable to delete Product Image from DB - {image.ImageUrl}");
+                    return false;
+                }
+
                 var result = await _unitOfWork.ProductImages.DeleteProductImage(imageId);
                 await _unitOfWork.SaveAsync();
                 return result;

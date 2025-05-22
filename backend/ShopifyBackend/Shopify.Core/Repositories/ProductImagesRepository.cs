@@ -35,6 +35,19 @@ namespace Shopify.Core.Repositories
             }
         }
 
+        public async Task<Productimage> GetProductImageByImageId(Guid imageId)
+        {
+            try
+            {
+                return await Context.Productimages.AsNoTracking().FirstOrDefaultAsync(u => u.Id == imageId);
+            }
+            catch (Exception error)
+            {
+                _logger.LogError("GetProductImageByImageId::Database exception: {0}", error);
+                return null;
+            }
+        }
+
         public async Task<IEnumerable<ProductImageLookupDTO>> GetProductUrlsByProductId(Guid productId)
         {
             try

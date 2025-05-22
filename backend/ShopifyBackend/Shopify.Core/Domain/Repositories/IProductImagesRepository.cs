@@ -12,7 +12,7 @@ namespace Shopify.Core.Domain.Repositories
     {
         public Task<List<Productimage>> GetProductImagesByProductId(Guid productId);
         public Task<IEnumerable<ProductImageLookupDTO>> GetProductUrlsByProductId(Guid productId);
-
+        public Task<Productimage> GetProductImageByImageId(Guid imageId);
         public Task<bool> DeleteProductImage(Guid imageId);
         public Task<bool> AddProductImage(Productimage productimage);
     }
