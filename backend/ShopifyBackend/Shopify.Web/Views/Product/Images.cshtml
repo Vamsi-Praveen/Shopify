@@ -28,7 +28,7 @@
             </div>
         </div>
     </div>
-    <div class="bg-white p-4 pl-6 border-bottom border-gray-200 rounded-[5px] shadow-sm hidden flex flex-wrap gap-4 min-w-1/2" id="image-container"></div>
+    <div class="bg-white p-4 pl-6 border-bottom border-gray-200 rounded-[5px] shadow-sm hidden flex flex-wrap gap-4 w-fit" id="image-container"></div>
 </div>
 
 <div class="absolute h-screen w-screen inset-0 bg-black/60 flex items-center justify-center hidden" id="add-image-modal">
@@ -45,7 +45,7 @@
             </div>
         </div>
         <div class="flex justify-end mt-4">
-            <button class="bg-emerald-600 hover:bg-emerald-700 transition text-white rounded-sm px-4 py-2 cursor-pointer flex items-center gap-3">
+            <button class="bg-emerald-600 hover:bg-emerald-700 transition text-white rounded-sm px-4 py-2 cursor-pointer flex items-center gap-3" id="add-upload">
                 <i class="ph ph-upload text-lg"></i>
                 Upload
             </button>
@@ -58,8 +58,10 @@
     const imageContainer = document.getElementById("image-container");
     const addImageModal = document.getElementById("add-image-modal");
     const addImgEl = document.getElementById("selectedImage");
+    const addUploadBtn = document.getElementById("add-upload");
+    let file = null;
 
-    document.addEventListener("DOMContentLoaded",()=>{
+    document.addEventListener("DOMContentLoaded", () => {
         const productInput = document.getElementById("productName");
         const suggestionBox = document.getElementById("suggestion");
 
@@ -72,8 +74,8 @@
         }
 
         async function fetchMatchingProducts(query) {
-            if (query.length < 2){
-                suggestionBox.innerHTML = ''
+            if (query.length < 2) {
+                suggestionBox.innerHTML = '';
             }
 
             try {
@@ -81,7 +83,7 @@
                 if (!response.ok) throw new Error("Network error");
 
                 const products = await response.json();
-                 suggestionBox.innerHTML = '';
+                suggestionBox.innerHTML = '';
                 if (products.length > 0) {
                     products.forEach(product => {
                         const li = document.createElement("li");
@@ -94,14 +96,13 @@
                         });
                         suggestionBox.appendChild(li);
                     });
+                } else if (query.length > 1) {
+                    const li = document.createElement("li");
+                    li.textContent = "No Products Found";
+                    li.className = "px-3 py-2 hover:bg-gray-200 cursor-pointer text-sm text-gray-700";
+                    suggestionBox.appendChild(li);
                 }
-                else if(query.length>1){
-                     const li = document.createElement("li");
-                     li.textContent = "No Products Found";
-                     li.className = "px-3 py-2 hover:bg-gray-200 cursor-pointer text-sm text-gray-700";
-                     suggestionBox.appendChild(li);
-                }
-                
+
             } catch (error) {
                 console.error("Error fetching products:", error);
             }
@@ -109,99 +110,134 @@
 
         productInput.addEventListener("input", debounce((e) => {
             const query = e.target.value.trim();
-            if(query.length){
+            if (query.length) {
                 fetchMatchingProducts(query);
-            }else{
+            } else {
                 suggestionBox.innerHTML = '';
             }
         }, 200));
+    });
 
-    })
-    async function getImages(){
-        try{
+    async function getImages() {
+        try {
+            imageContainer.innerHTML = '';
+
             const response = await fetch(`/Product/GetProductImages?productId=${encodeURIComponent(selectedProductId)}`);
             if (!response.ok) throw new Error("Network error");
 
             const productImages = await response.json();
 
-            if(productImages.length>0){
-                productImages.map((img)=>{
+            if (Array.isArray(productImages) && productImages.length > 0) {
+                productImages.forEach((img) => {
                     const imgEl = document.createElement("img");
                     const div = document.createElement("div");
                     div.className = "w-50 h-50 p-2 border border-gray-200 rounded-sm shadow-sm relative";
                     const innerDiv = document.createElement("div");
                     innerDiv.className = "absolute rounded-full bg-gray-500 w-5 h-5 top-2 right-2 flex items-center justify-center cursor-pointer";
-                    innerDiv.addEventListener("click",()=>{
+                    innerDiv.addEventListener("click", () => {
                         deleteImage(img.id);
-                    })
-                    innerDiv.innerHTML = "<i class='ph-bold ph-x text-white text-sm'></i>"
+                    });
+                    innerDiv.innerHTML = "<i class='ph-bold ph-x text-white text-sm'></i>";
                     imgEl.src = img.imageURL;
                     imgEl.className = "w-full h-full object-contain";
                     div.appendChild(innerDiv);
                     div.appendChild(imgEl);
                     imageContainer.appendChild(div);
-                    imageContainer.classList.remove("hidden");
-                })
+                });
             }
+
             const addImgDiv = document.createElement("div");
             addImgDiv.className = "w-50 h-50 p-3 border border-dashed border-gray-300 border-2 rounded-sm flex items-center justify-center cursor-pointer bg-gray-100 hover:bg-gray-200";
             addImgDiv.innerHTML = "<i class='ph-bold ph-plus text-4xl'></i>";
             const inputEl = document.createElement("input");
             inputEl.type = "file";
-            inputEl.className="hidden";
-            inputEl.id="add-img";
-            inputEl.accept="image/png, image/jpeg, image/gif, image/webp";
-            addImgDiv.appendChild(inputEl)
-            addImgDiv.addEventListener("click",()=>{
+            inputEl.className = "hidden";
+            inputEl.id = "add-img";
+            inputEl.accept = "image/png, image/jpeg, image/gif, image/webp";
+            addImgDiv.appendChild(inputEl);
+            addImgDiv.addEventListener("click", () => {
                 inputEl.click();
-            })
+            });
 
             inputEl.addEventListener("change", () => {
                 if (inputEl.files.length > 0) {
-                    const file = inputEl.files[0];
+                    const inputFile = inputEl.files[0];
+                    file = inputFile;
                     const reader = new FileReader();
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
                         addImgEl.src = e.target.result;
-                    }
-                    reader.readAsDataURL(file);
+                    };
+                    reader.readAsDataURL(inputFile);
                     addImageModal.classList.remove("hidden");
                 }
             });
 
-
             imageContainer.appendChild(addImgDiv);
+            imageContainer.classList.remove("hidden");
 
-        }catch(err){
-            console.error("Error fetching products:", err);
+        } catch (err) {
+            console.error("Error fetching product images:", err);
         }
     }
 
-    async function deleteImage(imageId){
-        const imageid = imageId;
-        if(imageid!=null){
-            const response =  await fetch(`/Product/DeleteProductImage?imageId=${encodeURIComponent(imageid)}`);
+    async function deleteImage(imageId) {
+        if (imageId != null) {
+            const response = await fetch(`/Product/DeleteProductImage?imageId=${encodeURIComponent(imageId)}`);
             if (!response.ok) throw new Error("Network error");
 
             const result = await response.json();
 
-            if(result.success){
-                openModal("success","Image Deleted",`${result.message}`);
+            if (result.success) {
+                openModal("success", "Image Deleted", `${result.message}`);
                 imageContainer.innerHTML = '';
                 await getImages();
+            } else {
+                openModal("error", "Image Delete Failed", `${result.message}`);
             }
-            else{
-                openModal("error","Image Deleted Failed",`${result.message}`);
-            }
-
         }
     }
 
-    function closeAddImageModal(){
+    function closeAddImageModal() {
         addImageModal.classList.add("hidden");
     }
 
-    async function uploadImage(){
+    addUploadBtn.addEventListener("click", () => {
+        if (file == null) {
+            openModal("error", "No Image", "Please select the image to upload");
+            return;
+        }
+        if (selectedProductId == null) {
+            openModal("error", "Product Id Not Found", "Please select the product id");
+            return;
+        }
+        uploadImage();
+    });
 
+    async function uploadImage() {
+        const productId = selectedProductId;
+        const imageFile = file;
+
+        const formData = new FormData();
+        formData.append("ProductId", productId);
+        formData.append("Image", imageFile);
+
+        try {
+            const response = await fetch(`/Product/UploadProductImage`, { method: "POST", body: formData });
+            if (!response.ok) throw new Error("Network error");
+
+            const result = await response.json();
+
+            if (result.success) {
+                addImageModal.classList.add("hidden");
+                imageContainer.innerHTML = '';
+                await getImages();
+                openModal("success", "Image Upload Successful", result.message);
+            } else {
+                openModal("error", "Image Upload Failed", result.message);
+            }
+
+        } catch (err) {
+            console.error("Error uploading product image:", err);
+        }
     }
-
 </script>
