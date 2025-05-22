@@ -186,13 +186,33 @@ namespace Shopify.Web.Controllers
             return productImages;
         }
 
+        [HttpPost]
+        public async Task<ServiceResult> UploadProductImage(ProductImageUploadDTO product)
+        {
+            var imageUrl = await _blobService.UploadImageAsync(product.Image);
+            if (imageUrl == null)
+            {
+                return new ServiceResult(false, "Failed to Upload Image in DB");
+            }
+
+            product.ImageUrl = imageUrl;
+
+            var result = await productService.UploadProductImage(product);
+
+            if (result)
+            {
+                return new ServiceResult(true, "Product Image Uploaded Successfully");
+            }
+            return new ServiceResult(false, "Failed to Upload Image");
+        }
+
         [HttpGet]
         public async Task<ServiceResult> DeleteProductImage(Guid imageId)
         {
             var result = await productService.DeleteProductImage(imageId);
             if (result)
             {
-                return new ServiceResult(true, "Product Image Deleted Successfull");
+                return new ServiceResult(true, "Product Image Deleted Successfully");
             }
             return new ServiceResult(false, "Failed to Delete Image");
         }

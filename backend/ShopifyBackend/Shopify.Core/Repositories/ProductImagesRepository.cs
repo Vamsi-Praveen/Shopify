@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Shopify.Core.Repositories
 {
@@ -68,6 +69,21 @@ namespace Shopify.Core.Repositories
             catch (Exception error)
             {
                 _logger.LogError("DeleteProductImage::Database exception: {0}", error);
+                return false;
+            }
+        }
+
+        public async Task<bool> AddProductImage(Productimage productimage)
+        {
+            try
+            {
+                await Context.Productimages.AddAsync(productimage);
+                await Context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception error)
+            {
+                _logger.LogError("AddProductImage::Database exception: {0}", error);
                 return false;
             }
         }

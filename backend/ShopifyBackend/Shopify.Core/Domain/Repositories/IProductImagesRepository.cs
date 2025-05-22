@@ -14,5 +14,6 @@ namespace Shopify.Core.Domain.Repositories
         public Task<IEnumerable<ProductImageLookupDTO>> GetProductUrlsByProductId(Guid productId);
 
         public Task<bool> DeleteProductImage(Guid imageId);
+        public Task<bool> AddProductImage(Productimage productimage);
     }
 }

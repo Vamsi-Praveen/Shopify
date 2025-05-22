@@ -117,6 +117,24 @@ namespace Shopify.Core.Services
             }
         }
 
+        public async Task<bool> UploadProductImage(ProductImageUploadDTO uploadDTO)
+        {
+            try
+            {
+                Productimage productimage = new Productimage()
+                {
+                    ProductId = uploadDTO.ProductId,
+                    ImageUrl = uploadDTO.ImageUrl
+                };
+
+                var upload = await _unitOfWork.ProductImages.AddProductImage(productimage);
+                return upload;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         public async Task<bool> DeleteProductImage(Guid imageId)
         {
             try
