@@ -41,17 +41,17 @@
                 <tr>
                     <th>
                         <span class="grid place-items-center text-black">
-                            Brand Logo
+                            Category Logo
                         </span>
                     </th>
                     <th>
                         <span class="grid place-items-center text-black">
-                            Brand Name
+                            Category Name
                         </span>
                     </th>
                     <th>
                         <span class="grid place-items-center text-black">
-                            Brand Description
+                            Category Description
                         </span>
                     </th>
                     <th>
@@ -68,26 +68,26 @@
             </thead>
             <tbody>
                 @{
-                    foreach (var brand in Model.Categories)
+                    foreach (var category in Model.Categories)
                     {
                         <tr class="text-center">
                             <td>
                                 @{
-                                    if (brand.ImageUrl == null)
+                                    if (category.ImageUrl == null)
                                     {
                                         <p>No Logo</p>
                                     }
                                     else
                                     {
-                                        <img alt="brandlogo" src="@brand.ImageUrl" class="size-25 object-contain" />
+                                        <img alt="brandlogo" src="@category.ImageUrl" class="size-25 object-contain" />
                                     }
                                 }
                             </td>
-                            <td>@brand.Name</td>
-                            <td class="text-justify">@brand.Description</td>
+                            <td>@category.Name</td>
+                            <td class="text-justify">@category.Description</td>
                             <td class="text-center">
                                 @{
-                                    if (brand.IsActive == true)
+                                    if (category.IsActive == true)
                                     {
                                         <span class="inline-block w-3 h-3 rounded-full bg-green-500" title="Active"></span>
                                     }
