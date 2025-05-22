@@ -116,5 +116,19 @@ namespace Shopify.Core.Services
                 return null;
             }
         }
+
+        public async Task<bool> DeleteProductImage(Guid imageId)
+        {
+            try
+            {
+                var result = await _unitOfWork.ProductImages.DeleteProductImage(imageId);
+                await _unitOfWork.SaveAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }

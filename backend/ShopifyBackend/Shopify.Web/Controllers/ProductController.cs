@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shopify.Core.Communication;
 using Shopify.Core.Domain.Services;
 using Shopify.Core.DTOs;
 using Shopify.Core.Entities;
@@ -183,6 +184,17 @@ namespace Shopify.Web.Controllers
         {
             var productImages = await productService.GetAllProductImages(productId);
             return productImages;
+        }
+
+        [HttpGet]
+        public async Task<ServiceResult> DeleteProductImage(Guid imageId)
+        {
+            var result = await productService.DeleteProductImage(imageId);
+            if (result)
+            {
+                return new ServiceResult(true, "Product Image Deleted Successfull");
+            }
+            return new ServiceResult(false, "Failed to Delete Image");
         }
     }
 }

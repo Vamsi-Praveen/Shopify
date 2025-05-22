@@ -50,7 +50,7 @@ namespace Shopify.Core.Repositories
             }
             catch (Exception error)
             {
-                _logger.LogError("GetProductImageByProductId::Database exception: {0}", error);
+                _logger.LogError("GetProductUrlsByProductId::Database exception: {0}", error);
                 return null;
             }
         }
@@ -61,13 +61,13 @@ namespace Shopify.Core.Repositories
             {
                 var image = await Context.Productimages.FirstOrDefaultAsync(u => u.Id == imageId);
                 if (image != null) { 
-                    await Context.Productimages.Remove(image);
+                    Context.Productimages.Remove(image);
                 }
                 return true;
             }
             catch (Exception error)
             {
-                _logger.LogError("GetProductImageByProductId::Database exception: {0}", error);
+                _logger.LogError("DeleteProductImage::Database exception: {0}", error);
                 return false;
             }
         }

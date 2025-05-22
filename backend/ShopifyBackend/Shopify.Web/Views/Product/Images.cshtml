@@ -88,7 +88,7 @@
             }else{
                 suggestionBox.innerHTML = '';
             }
-        }, 300));
+        }, 200));
 
     })
     async function getImages(){
@@ -104,7 +104,7 @@
                     const div = document.createElement("div");
                     div.className = "w-50 h-50 p-2 border border-gray-200 rounded-sm shadow-sm relative";
                     const innerDiv = document.createElement("div");
-                    innerDiv.className = "absolute rounded-full bg-gray-500 w-5 h-5 top-2 right-2 z-10 flex items-center justify-center cursor-pointer";
+                    innerDiv.className = "absolute rounded-full bg-gray-500 w-5 h-5 top-2 right-2 flex items-center justify-center cursor-pointer";
                     innerDiv.addEventListener("click",()=>{
                         deleteImage(img.id);
                     })
@@ -128,7 +128,23 @@
     }
 
     async function deleteImage(imageId){
-        alert(imageId);
+        const imageid = imageId;
+        if(imageid!=null){
+            const response =  await fetch(`/Product/DeleteProductImage?imageId=${encodeURIComponent(imageid)}`);
+            if (!response.ok) throw new Error("Network error");
+
+            const result = await response.json();
+
+            if(result.success){
+                openModal("success","Image Deleted",`${result.message}`);
+                imageContainer.innerHTML = '';
+                await getImages();
+            }
+            else{
+                openModal("error","Image Deleted Failed",`${result.message}`);
+            }
+
+        }
     }
 
 </script>
