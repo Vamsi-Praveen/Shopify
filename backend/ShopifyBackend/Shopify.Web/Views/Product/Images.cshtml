@@ -105,8 +105,11 @@
                     div.className = "w-50 h-50 p-2 border border-gray-200 rounded-sm shadow-sm relative";
                     const innerDiv = document.createElement("div");
                     innerDiv.className = "absolute rounded-full bg-gray-500 w-5 h-5 top-2 right-2 z-10 flex items-center justify-center cursor-pointer";
+                    innerDiv.addEventListener("click",()=>{
+                        deleteImage(img.id);
+                    })
                     innerDiv.innerHTML = "<i class='ph-bold ph-x text-white text-sm'></i>"
-                    imgEl.src = img;
+                    imgEl.src = img.imageURL;
                     imgEl.className = "w-full h-full object-contain";
                     div.appendChild(innerDiv);
                     div.appendChild(imgEl);
@@ -122,5 +125,10 @@
         }catch(err){
             console.error("Error fetching products:", err);
         }
-        }
+    }
+
+    async function deleteImage(imageId){
+        alert(imageId);
+    }
+
 </script>

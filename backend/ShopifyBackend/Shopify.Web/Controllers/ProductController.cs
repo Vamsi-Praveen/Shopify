@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Shopify.Web.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly IBrandService brandService;
@@ -25,7 +25,6 @@ namespace Shopify.Web.Controllers
             this.categoryService = categoryService;
             this.productService = productService;
         }
-
         public async Task<IActionResult> Add()
         {
             var allBrands = await brandService.GetAllBrandsAsync();
@@ -180,7 +179,7 @@ namespace Shopify.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<string>> GetProductImages(Guid productId)
+        public async Task<IEnumerable<ProductImageLookupDTO>> GetProductImages(Guid productId)
         {
             var productImages = await productService.GetAllProductImages(productId);
             return productImages;

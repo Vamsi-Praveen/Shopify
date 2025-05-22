@@ -19,7 +19,7 @@ namespace Shopify.Core.Utilities
             string containerName = configuration["Azure:ContainerName"];
 
             _containerClient = new BlobContainerClient(connectionString, containerName);
-            _containerClient.CreateIfNotExists(); // Ensure container exists
+            _containerClient.CreateIfNotExists();
         }
 
         public async Task<string> UploadImageAsync(IFormFile file)

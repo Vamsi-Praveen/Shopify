@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Shopify.Core.Data;
 using Shopify.Core.Domain.Repositories;
+using Shopify.Core.DTOs;
 using Shopify.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -33,20 +34,41 @@ namespace Shopify.Core.Repositories
             }
         }
 
-        public async Task<IEnumerable<string>> GetProductUrlsByProductId(Guid productId)
+        public async Task<IEnumerable<ProductImageLookupDTO>> GetProductUrlsByProductId(Guid productId)
         {
             try
             {
                 return await Context.Productimages
                     .AsNoTracking()
                     .Where(u => u.ProductId == productId)
-                    .Select(p => p.ImageUrl)
+                    .Select(p => new ProductImageLookupDTO()
+                    {
+                        Id = p.Id,
+                        ImageURL = p.ImageUrl
+                    })
                     .ToListAsync();
             }
             catch (Exception error)
             {
                 _logger.LogError("GetProductImageByProductId::Database exception: {0}", error);
                 return null;
+            }
+        }
+
+        public async Task<bool> DeleteProductImage(Guid imageId)
+        {
+            try
+            {
+                var image = await Context.Productimages.FirstOrDefaultAsync(u => u.Id == imageId);
+                if (image != null) { 
+                    await Context.Productimages.Remove(image);
+                }
+                return true;
+            }
+            catch (Exception error)
+            {
+                _logger.LogError("GetProductImageByProductId::Database exception: {0}", error);
+                return false;
             }
         }
     }

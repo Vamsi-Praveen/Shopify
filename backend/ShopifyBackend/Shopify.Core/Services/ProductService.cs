@@ -104,7 +104,7 @@ namespace Shopify.Core.Services
         }
 
 
-        public async Task<IEnumerable<string>> GetAllProductImages(Guid productId)
+        public async Task<IEnumerable<ProductImageLookupDTO>> GetAllProductImages(Guid productId)
         {
             try
             {
