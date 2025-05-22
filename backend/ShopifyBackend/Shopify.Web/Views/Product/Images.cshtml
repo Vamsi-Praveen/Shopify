@@ -147,8 +147,9 @@
             }
 
             const addImgDiv = document.createElement("div");
-            addImgDiv.className = "w-50 h-50 p-3 border border-dashed border-gray-300 border-2 rounded-sm flex items-center justify-center cursor-pointer bg-gray-100 hover:bg-gray-200";
+            addImgDiv.className = "w-50 h-50 p-3 border border-dashed border-gray-300 border-2 rounded-sm flex flex-col gap-2 items-center justify-center cursor-pointer bg-gray-100 hover:bg-gray-200";
             addImgDiv.innerHTML = "<i class='ph-bold ph-plus text-4xl'></i>";
+            addImgDiv.innerHTML+="<p>Add Image</p>";
             const inputEl = document.createElement("input");
             inputEl.type = "file";
             inputEl.className = "hidden";
