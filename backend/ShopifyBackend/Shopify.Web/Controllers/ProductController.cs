@@ -117,17 +117,6 @@ namespace Shopify.Web.Controllers
             return View(brandViewModel);
         }
 
-        public async Task<IActionResult> Categories()
-        {
-            var allCategories = await categoryService.GetAllCategoriesAsync();
-            var category = new CategoriesViewModel()
-            {
-                Categories = allCategories
-            };
-            return View(category);
-        }
-
-
         [HttpPost]
         public async Task<IActionResult> Brands(BrandViewModel brandDto)
         {
@@ -141,9 +130,13 @@ namespace Shopify.Web.Controllers
                 });
             }
 
-            var imageUrl = await _blobService.UploadImageAsync(brandDto.ThumbnailFile);
+            string imageUrl = null;
+            if(brandDto.ThumbnailFile != null)
+            {
+                imageUrl = await _blobService.UploadImageAsync(brandDto.ThumbnailFile);
+            }
 
-            if (imageUrl == null)
+            if (brandDto.ThumbnailFile != null && imageUrl == null)
             {
                 TempData["ModalType"] = "ERROR";
                 TempData["ModalTitle"] = "Creation Failed";
@@ -222,6 +215,17 @@ namespace Shopify.Web.Controllers
             return new ServiceResult(false, "Failed to Delete Image");
         }
 
+
+        public async Task<IActionResult> Categories()
+        {
+            var allCategories = await categoryService.GetAllCategoriesAsync();
+            var category = new CategoriesViewModel()
+            {
+                Categories = allCategories
+            };
+            return View(category);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Categories(CategoriesViewModel category)
         {
@@ -235,9 +239,13 @@ namespace Shopify.Web.Controllers
                 });
             }
 
-            var imageUrl = await _blobService.UploadImageAsync(category.ImageFile);
+            string imageUrl = null;
+            if (category.ImageFile != null)
+            {
+                imageUrl = await _blobService.UploadImageAsync(category.ImageFile);
+            }
 
-            if (imageUrl == null)
+            if (category.ImageFile != null && imageUrl == null)
             {
                 TempData["ModalType"] = "ERROR";
                 TempData["ModalTitle"] = "Creation Failed";

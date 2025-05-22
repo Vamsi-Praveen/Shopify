@@ -169,6 +169,13 @@
 
 <script>  
 
+    if (document.getElementById("search-table") && typeof simpleDatatables.DataTable !== 'undefined') {
+        const dataTable = new simpleDatatables.DataTable("#search-table", {
+            searchable: true,
+            sortable: false
+        });
+    }
+
      const categoryModal = document.getElementById("category-modal") 
 
      const thumbnailUpload = document.getElementById('thumbnail-upload'); 
