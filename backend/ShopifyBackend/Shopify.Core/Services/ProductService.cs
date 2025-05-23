@@ -54,11 +54,23 @@ namespace Shopify.Core.Services
             }
         }
 
+        public async Task<Product> GetProductDetailsById(Guid productId)
+        {
+            try
+            {
+                return await _unitOfWork.Product.GetProductById(productId);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public async Task<bool> DeleteProduct(Guid productId)
         {
             try
             {
-                // Remove related product images and prodcut review 
+                // Remove related product images and product review 
                 var productReviews = await _unitOfWork.ProductReviews.GetProductReviewsByProductId(productId);
                 foreach (var review in productReviews)
                 {

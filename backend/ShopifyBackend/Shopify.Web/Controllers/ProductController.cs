@@ -7,11 +7,13 @@ using Shopify.Core.Entities;
 using Shopify.Core.Utilities;
 using Shopify.Web.DTO;
 using Shopify.Web.Models;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace Shopify.Web.Controllers
 {
     [Authorize]
+    [Route("{controller}")]
     public class ProductController : Controller
     {
         private readonly IBrandService brandService;
@@ -26,6 +28,8 @@ namespace Shopify.Web.Controllers
             this.categoryService = categoryService;
             this.productService = productService;
         }
+        
+        // Product
         public async Task<IActionResult> Add()
         {
             var allBrands = await brandService.GetAllBrandsAsync();
@@ -96,17 +100,95 @@ namespace Shopify.Web.Controllers
 
 
         }
-        public IActionResult Images()
-        {
-            return View();
-        }
 
+        [HttpGet]
+        [Route("GetProductById/{productId}")]
+        public async Task<ServiceResult> GetProductById(string productId)
+        {
+            if (!Guid.TryParse(productId, out Guid parsedProductId))
+            {
+                return new ServiceResult(false, "Invalid GUID format");
+            }
+            var product = await productService.GetProductDetailsById(parsedProductId);
+            if (product == null)
+            {
+                return new ServiceResult(false, "Product details not found");
+            }
+            return new ServiceResult(true, "Product details found", product);
+        }
+       
         public async Task<IActionResult> List()
         {
             var allProducts = await productService.GetAllProductsAsync(); 
             return View(allProducts);
         }
 
+        [HttpGet]
+        public async Task<IEnumerable<ProductLookupDto>> SearchProduct(string productName)
+        {
+            var products = await productService.SearchProductByName(productName);
+            return products;
+        }
+
+
+        // Product Images
+        public IActionResult Images()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<ServiceResult> GetProductImages(string productId)
+        {
+            if (!Guid.TryParse(productId, out Guid parsedproductId))
+            {
+                return new ServiceResult(false, "Invalid GUID format");
+            }
+            var productImages = await productService.GetAllProductImages(parsedproductId);
+            if(productImages == null)
+            {
+                return new ServiceResult(false, "No Product Images found");
+            }
+            return new ServiceResult(true, "Product Images found", productImages);
+        }
+
+        [HttpPost]
+        public async Task<ServiceResult> UploadProductImage(ProductImageUploadDTO product)
+        {
+            var imageUrl = await _blobService.UploadImageAsync(product.Image);
+            if (imageUrl == null)
+            {
+                return new ServiceResult(false, "Failed to Upload Image in DB");
+            }
+
+            product.ImageUrl = imageUrl;
+
+            var result = await productService.UploadProductImage(product);
+
+            if (result)
+            {
+                return new ServiceResult(true, "Product Image Uploaded Successfully");
+            }
+            return new ServiceResult(false, "Failed to Upload Image");
+        }
+
+        [HttpGet]
+        public async Task<ServiceResult> DeleteProductImage(string imageId)
+        {
+            if (!Guid.TryParse(imageId, out Guid parsedImageId))
+            {
+                return new ServiceResult(false, "Invalid GUID format");
+            }
+            var result = await productService.DeleteProductImage(parsedImageId);
+            if (result)
+            {
+                return new ServiceResult(true, "Product Image Deleted Successfully");
+            }
+            return new ServiceResult(false, "Failed to Delete Image");
+        }
+
+
+        // Brands
         public async Task<IActionResult> Brands()
         {
             var allBrands = await brandService.GetAllBrandsAsync();
@@ -131,7 +213,7 @@ namespace Shopify.Web.Controllers
             }
 
             string imageUrl = null;
-            if(brandDto.ThumbnailFile != null)
+            if (brandDto.ThumbnailFile != null)
             {
                 imageUrl = await _blobService.UploadImageAsync(brandDto.ThumbnailFile);
             }
@@ -171,51 +253,23 @@ namespace Shopify.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ProductLookupDto>> SearchProduct(string productName)
+        [Route("GetBrandById/{brandId}")]
+        public async Task<ServiceResult> GetBrandById(string brandId)
         {
-            var products = await productService.SearchProductByName(productName);
-            return products;
-        }
-
-        [HttpGet]
-        public async Task<IEnumerable<ProductImageLookupDTO>> GetProductImages(Guid productId)
-        {
-            var productImages = await productService.GetAllProductImages(productId);
-            return productImages;
-        }
-
-        [HttpPost]
-        public async Task<ServiceResult> UploadProductImage(ProductImageUploadDTO product)
-        {
-            var imageUrl = await _blobService.UploadImageAsync(product.Image);
-            if (imageUrl == null)
+            if (!Guid.TryParse(brandId, out Guid parsedBrandId))
             {
-                return new ServiceResult(false, "Failed to Upload Image in DB");
+                return new ServiceResult(false, "Invalid GUID format");
             }
-
-            product.ImageUrl = imageUrl;
-
-            var result = await productService.UploadProductImage(product);
-
-            if (result)
+            var brand = await brandService.GetBrandDatailsById(parsedBrandId);
+            if (brand == null)
             {
-                return new ServiceResult(true, "Product Image Uploaded Successfully");
+                return new ServiceResult(false, "Brand details not found");
             }
-            return new ServiceResult(false, "Failed to Upload Image");
-        }
-
-        [HttpGet]
-        public async Task<ServiceResult> DeleteProductImage(Guid imageId)
-        {
-            var result = await productService.DeleteProductImage(imageId);
-            if (result)
-            {
-                return new ServiceResult(true, "Product Image Deleted Successfully");
-            }
-            return new ServiceResult(false, "Failed to Delete Image");
+            return new ServiceResult(true, "Brand details found", brand);
         }
 
 
+        // Categories
         public async Task<IActionResult> Categories()
         {
             var allCategories = await categoryService.GetAllCategoriesAsync();
@@ -278,5 +332,24 @@ namespace Shopify.Web.Controllers
 
             return RedirectToAction("Categories", "Product");
         }
+
+        [HttpGet]
+        [Route("GetCategoryById/{categoryId}")]
+        public async Task<ServiceResult> GetCategoryById(string categoryId)
+        {
+            if (!Guid.TryParse(categoryId, out Guid parsedCategoryId))
+            {
+                return new ServiceResult(false, "Invalid GUID format");
+            }
+
+            var category = await categoryService.GetCategoryDetailsById(parsedCategoryId);
+            if (category == null)
+            {
+                return new ServiceResult(false, "Category details not found");
+            }
+            return new ServiceResult(true, "Category details found", category);
+        }
+
+
     }
 }

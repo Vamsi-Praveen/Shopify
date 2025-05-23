@@ -1,14 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shopify.Core.Communication;
 using Shopify.Core.Domain.Services;
 using Shopify.Core.Entities;
 using Shopify.Core.Enums;
+using Shopify.Core.Services;
 using Shopify.Web.DTO;
 using Shopify.Web.Models;
 
 namespace Shopify.Web.Controllers
 {
     [Authorize(Roles = "Admin")]
+    [Route("{controller}")]
     public class EmployeeController : Controller
     {
         private readonly IUserService _userService;
@@ -111,6 +114,22 @@ namespace Shopify.Web.Controllers
             return View(users);
         }
 
+        [HttpGet]
+        [Route("GetUserDetailsById/{userId}")]
+        public async Task<ServiceResult> GetUserDetailsById(string userId)
+        {
+            if (!Guid.TryParse(userId, out Guid parsedUserId))
+            {
+                return new ServiceResult(false, "Invalid GUID format");
+            }
+
+            var user = await _userService.GetUserDetailsByUUID(parsedUserId);
+            if (user == null)
+            {
+                return new ServiceResult(false, "User details not found");
+            }
+            return new ServiceResult(true, "User details found", user);
+        }
 
         [HttpGet]
         public async Task<List<string>> SearchUsers(string email)

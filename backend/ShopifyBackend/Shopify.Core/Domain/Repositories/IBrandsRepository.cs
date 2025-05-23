@@ -10,5 +10,6 @@ namespace Shopify.Core.Domain.Repositories
     public interface IBrandsRepository : IGenericRepository<Brand>
     {
         public Task<IEnumerable<Brand>> GetAllBrands();
+        public Task<Brand> GetBrandById(Guid brandId);
     }
 }

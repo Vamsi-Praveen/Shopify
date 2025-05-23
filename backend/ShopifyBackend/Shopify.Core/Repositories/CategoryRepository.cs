@@ -50,6 +50,19 @@ namespace Shopify.Core.Repositories
                 return false;
             }
         }
+
+        public async Task<Category> GetCategoryById(Guid categoryId)
+        {
+            try
+            {
+                return await Context.Categories.AsNoTracking().SingleOrDefaultAsync(u => u.Id == categoryId);
+            }
+            catch (Exception error)
+            {
+                _logger.LogError("GetCategoryById::Database exception: {0}", error);
+                return null;
+            }
+        }
     }
 
 }

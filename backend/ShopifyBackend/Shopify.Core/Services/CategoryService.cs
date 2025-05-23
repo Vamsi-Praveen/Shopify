@@ -35,5 +35,17 @@ namespace Shopify.Core.Services
                 return false;
             }
         }
+
+        public async Task<Category>GetCategoryDetailsById(Guid categoryId)
+        {
+            try
+            {
+                return await _unitOfWork.Category.GetCategoryById(categoryId);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

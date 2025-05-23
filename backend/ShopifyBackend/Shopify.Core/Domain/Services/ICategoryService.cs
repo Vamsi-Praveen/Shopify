@@ -12,5 +12,7 @@ namespace Shopify.Core.Domain.Services
        public Task<IEnumerable<Category>> GetAllCategoriesAsync();
 
        public Task<bool> CreateCategory(Category category);
+
+        public Task<Category> GetCategoryDetailsById(Guid categoryId);
     }
 }

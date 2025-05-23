@@ -36,5 +36,17 @@ namespace Shopify.Core.Services
                 return false;
             }
         }
+
+        public async Task<Brand> GetBrandDatailsById(Guid brandId)
+        {
+            try
+            {
+                return await _unitOfWork.Brands.GetBrandById(brandId);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

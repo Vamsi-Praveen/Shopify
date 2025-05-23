@@ -35,5 +35,18 @@ namespace Shopify.Core.Repositories
                 return null;
             }
         }
+
+        public async Task<Brand> GetBrandById(Guid brandId)
+        {
+            try
+            {
+                return await Context.Brands.AsNoTracking().SingleOrDefaultAsync(u => u.Id == brandId);
+            }
+            catch (Exception error)
+            {
+                _logger.LogError("GetBrandById::Database exception: {0}", error);
+                return null;
+            }
+        }
     }
 }
