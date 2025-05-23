@@ -125,7 +125,8 @@
             const response = await fetch(`/Product/GetProductImages?productId=${encodeURIComponent(selectedProductId)}`);
             if (!response.ok) throw new Error("Network error");
 
-            const productImages = await response.json();
+            const result = await response.json();
+            const productImages = result.resource;
 
             if (Array.isArray(productImages) && productImages.length > 0) {
                 productImages.forEach((img) => {

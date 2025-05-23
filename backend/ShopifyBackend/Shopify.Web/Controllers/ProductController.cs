@@ -318,10 +318,30 @@ namespace Shopify.Web.Controllers
                 SellingPrice = product.SellingPrice,
                 CategoryId = product.CategoryId,
                 BrandId = product.BrandId,
-                UnitOfMeasure = product.UnitOfMeasure
+                UnitOfMeasure = product.UnitOfMeasure,
             };
 
             return View(productView);
+        }
+
+
+        [HttpPost]
+        public async Task<ServiceResult> DeleteProduct(Guid id)
+        {
+            if (id == null)
+            {
+                return new ServiceResult(false, "Product Id is not Found");
+            }
+
+            bool isSuccess = await productService.DeleteProduct(id);
+            if (isSuccess)
+            {
+                return new ServiceResult(true, "Product deleted Successfully");
+            }
+            else
+            {
+                return new ServiceResult(false, "Product deletion failed");
+            }
         }
 
     }

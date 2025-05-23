@@ -10,8 +10,7 @@ using Shopify.Web.Models;
 
 namespace Shopify.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
-    [Route("{controller}")]
+    [Authorize]
     public class EmployeeController : Controller
     {
         private readonly IUserService _userService;
