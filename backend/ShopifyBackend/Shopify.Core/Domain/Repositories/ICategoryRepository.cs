@@ -10,7 +10,8 @@ namespace Shopify.Core.Domain.Repositories
     public interface ICategoryRepository : IGenericRepository<Category>
     {
         public Task<IEnumerable<Category>> GetAllCategories();
+
         public Task<bool> CreateCategory (Category category);
-        public Task<Category> GetCategoryById(Guid categoryId);
+        Task<Category> GetCategoryById(Guid categoryId);
     }
 }

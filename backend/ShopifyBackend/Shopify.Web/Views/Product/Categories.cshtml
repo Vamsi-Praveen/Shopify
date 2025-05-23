@@ -84,20 +84,37 @@
                                 }
                             </td>
                             <td>@category.Name</td>
-                            <td class="text-justify">@category.Description</td>
+                            <td class="text-justify max-w-md">@category.Description</td>
                             <td class="text-center">
                                 @{
                                     if (category.IsActive == true)
                                     {
-                                        <span class="inline-block w-3 h-3 rounded-full bg-green-500" title="Active"></span>
+                                        <div class="flex items-center justify-center gap-2">
+                                            <span class="inline-block w-3 h-3 rounded-full bg-green-500"></span>
+                                            <span class="text-green-600">Active</span>
+                                        </div>
                                     }
                                     else
                                     {
-                                        <span class="inline-block w-3 h-3 rounded-full bg-red-500" title="Inactive"></span>
+                                        <div class="flex items-center justify-center gap-2">
+                                            <span class="inline-block w-3 h-3 rounded-full bg-red-500"></span>
+                                            <span class="text-red-600">In Active</span>
+                                        </div>
                                     }
                                 }
                             </td>
-                            <td>Edit | Delete</td>
+                            <td>
+                                <div class="flex items-center justify-center">
+                                    <button class="flex items-center gap-1 font-semibold text-blue-500 cursor-pointer hover:bg-blue-100 px-2 py-1 rounded-sm">
+                                        <i class="ph-bold ph-pencil"></i>
+                                        <span>Edit</span>
+                                    </button>
+                                    <button class="flex items-center gap-1 font-semibold text-red-400 cursor-pointer hover:bg-red-100 px-2 py-1 rounded-sm">
+                                        <i class="ph-bold ph-trash"></i>
+                                        <span>Delete</span>
+                                    </button>
+                                </div>
+                            </td>
                         </tr>
                     }
                 }

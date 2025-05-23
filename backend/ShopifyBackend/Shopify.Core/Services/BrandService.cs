@@ -37,7 +37,7 @@ namespace Shopify.Core.Services
             }
         }
 
-        public async Task<Brand> GetBrandDatailsById(Guid brandId)
+        public async Task<Brand> GetBrandDetailsById(Guid brandId)
         {
             try
             {

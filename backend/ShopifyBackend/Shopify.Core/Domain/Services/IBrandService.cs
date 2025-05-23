@@ -10,7 +10,8 @@ namespace Shopify.Core.Domain.Services
     public interface IBrandService
     {
        public Task<IEnumerable<Brand>> GetAllBrandsAsync();
+
        public Task<bool> CreateBrand(Brand brand);
-       public Task<Brand> GetBrandDatailsById(Guid brandId);
+       public Task<Brand> GetBrandDetailsById(Guid parsedBrandId);
     }
 }

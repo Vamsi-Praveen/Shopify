@@ -33,32 +33,32 @@
             <thead>
                 <tr>
                     <th>
-                        <span class="text-black">
+                        <span class="text-black grid place-items-center">
                             Product Image
                         </span>
                     </th>
                     <th>
-                        <span class="text-black">
+                        <span class="text-black grid place-items-center">
                             Product Name
                         </span>
                     </th>
                     <th>
-                        <span class="text-black">
+                        <span class="text-black grid place-items-center">
                             Product Description
                         </span>
                     </th>
                     <th>
-                        <span class="text-black">
+                        <span class="text-black grid place-items-center">
                             Category Name
                         </span>
                     </th>
                     <th>
-                        <span class="text-black">
+                        <span class="text-black grid place-items-center">
                             Brand Name
                         </span>
                     </th>
                     <th>
-                        <span class="text-black">
+                        <span class="text-black grid place-items-center">
                             Action
                         </span>
                     </th>
@@ -72,11 +72,13 @@
                             <td class="!p-4">
                                 <img src="@u.ThumbnailImage" alt="Product" class="size-20 object-contain"/>
                             </td>
-                            <td class="!p-4">@u.Name</td>
-                            <td class="!p-4">@u.Description</td>
-                            <td class="!p-4">@u.Category.Name</td>
-                            <td class="!p-4">@u.Brand.Name</td>
-                            <td class="!p-4">View Product</td>
+                            <td class="!p-4 text-center">@u.Name</td>
+                            <td class="!p-4 text-center text-justify max-w-md">@u.Description</td>
+                            <td class="!p-4 text-center">@u.Category.Name</td>
+                            <td class="!p-4 text-center">@u.Brand.Name</td>
+                            <td class="!p-4 text-center">
+                                <a asp-action="Details" asp-route-id ="@u.Id" class="px-2 py-2 bg-emerald-600 text-white rounded-sm hover:bg-emerald-700 cursor-pointer">View Product</a>
+                            </td>
                         </tr>
                     }
                 }

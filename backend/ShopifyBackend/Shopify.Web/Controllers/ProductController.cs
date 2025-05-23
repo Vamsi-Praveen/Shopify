@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 namespace Shopify.Web.Controllers
 {
     [Authorize]
-    [Route("{controller}")]
     public class ProductController : Controller
     {
         private readonly IBrandService brandService;
@@ -99,22 +98,6 @@ namespace Shopify.Web.Controllers
             return RedirectToAction("Add", "Product");
 
 
-        }
-
-        [HttpGet]
-        [Route("GetProductById/{productId}")]
-        public async Task<ServiceResult> GetProductById(string productId)
-        {
-            if (!Guid.TryParse(productId, out Guid parsedProductId))
-            {
-                return new ServiceResult(false, "Invalid GUID format");
-            }
-            var product = await productService.GetProductDetailsById(parsedProductId);
-            if (product == null)
-            {
-                return new ServiceResult(false, "Product details not found");
-            }
-            return new ServiceResult(true, "Product details found", product);
         }
        
         public async Task<IActionResult> List()
@@ -252,22 +235,6 @@ namespace Shopify.Web.Controllers
             return RedirectToAction("Brands", "Product");
         }
 
-        [HttpGet]
-        [Route("GetBrandById/{brandId}")]
-        public async Task<ServiceResult> GetBrandById(string brandId)
-        {
-            if (!Guid.TryParse(brandId, out Guid parsedBrandId))
-            {
-                return new ServiceResult(false, "Invalid GUID format");
-            }
-            var brand = await brandService.GetBrandDatailsById(parsedBrandId);
-            if (brand == null)
-            {
-                return new ServiceResult(false, "Brand details not found");
-            }
-            return new ServiceResult(true, "Brand details found", brand);
-        }
-
 
         // Categories
         public async Task<IActionResult> Categories()
@@ -333,23 +300,29 @@ namespace Shopify.Web.Controllers
             return RedirectToAction("Categories", "Product");
         }
 
-        [HttpGet]
-        [Route("GetCategoryById/{categoryId}")]
-        public async Task<ServiceResult> GetCategoryById(string categoryId)
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (!Guid.TryParse(categoryId, out Guid parsedCategoryId))
+            var allBrands = await brandService.GetAllBrandsAsync();
+            var allCategories = await categoryService.GetAllCategoriesAsync();
+            var product = await productService.GetProductDetailsById(id);
+            var productView = new ProductViewModel()
             {
-                return new ServiceResult(false, "Invalid GUID format");
-            }
+                brands = allBrands.Where(b => b.IsActive == true),
+                categories = allCategories.Where(b => b.IsActive == true),
+                Name = product.Name,
+                Description = product.Description,
+                Sku = product.Sku,
+                IsFeatured = (bool)product.IsFeatured,
+                ShortDescription = product.ShortDescription,
+                BasePrice = product.BasePrice,
+                SellingPrice = product.SellingPrice,
+                CategoryId = product.CategoryId,
+                BrandId = product.BrandId,
+                UnitOfMeasure = product.UnitOfMeasure
+            };
 
-            var category = await categoryService.GetCategoryDetailsById(parsedCategoryId);
-            if (category == null)
-            {
-                return new ServiceResult(false, "Category details not found");
-            }
-            return new ServiceResult(true, "Category details found", category);
+            return View(productView);
         }
-
 
     }
 }

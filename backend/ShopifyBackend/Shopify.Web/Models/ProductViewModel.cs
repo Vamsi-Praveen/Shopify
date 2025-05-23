@@ -32,5 +32,7 @@ namespace Shopify.Web.Models
         public string? CategoryName { get; set; }
 
         public string? BrandName { get; set; }
+
+        public string? ImageUrl { get; set; }
     }
 }
