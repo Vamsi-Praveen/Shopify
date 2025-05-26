@@ -113,6 +113,66 @@ namespace Shopify.Web.Controllers
             return products;
         }
 
+        public async Task<IActionResult> ProductDetails(Guid id)
+        {
+            var allBrands = await brandService.GetAllBrandsAsync();
+            var allCategories = await categoryService.GetAllCategoriesAsync();
+            var product = await productService.GetProductDetailsById(id);
+            var productView = new ProductViewModel()
+            {
+                Id = id,
+                brands = allBrands.Where(b => b.IsActive == true),
+                categories = allCategories.Where(b => b.IsActive == true),
+                Name = product.Name,
+                Description = product.Description,
+                Sku = product.Sku,
+                IsFeatured = (bool)product.IsFeatured,
+                ShortDescription = product.ShortDescription,
+                BasePrice = product.BasePrice,
+                SellingPrice = product.SellingPrice,
+                CategoryId = product.CategoryId,
+                BrandId = product.BrandId,
+                UnitOfMeasure = product.UnitOfMeasure,
+            };
+
+            return View(productView);
+        }
+
+        public async Task<ServiceResult> DeleteProductDetails(Guid productId)
+        {
+            var result = await productService.DeleteProduct(productId);
+            if (result == false)
+            {
+                return new ServiceResult(false, "Failed to Delete Product Details");
+            }
+            return new ServiceResult(true, "Product details deleted successfully");
+        }
+
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var allBrands = await brandService.GetAllBrandsAsync();
+            var allCategories = await categoryService.GetAllCategoriesAsync();
+            var product = await productService.GetProductDetailsById(id);
+            var productView = new ProductViewModel()
+            {
+                Id = id,
+                brands = allBrands.Where(b => b.IsActive == true),
+                categories = allCategories.Where(b => b.IsActive == true),
+                Name = product.Name,
+                Description = product.Description,
+                Sku = product.Sku,
+                IsFeatured = (bool)product.IsFeatured,
+                ShortDescription = product.ShortDescription,
+                BasePrice = product.BasePrice,
+                SellingPrice = product.SellingPrice,
+                CategoryId = product.CategoryId,
+                BrandId = product.BrandId,
+                UnitOfMeasure = product.UnitOfMeasure,
+            };
+
+            return View(productView);
+        }
+
 
         // Product Images
         public IActionResult Images()
@@ -248,6 +308,15 @@ namespace Shopify.Web.Controllers
             return View(brandView);
         }
 
+        public async Task<ServiceResult> DeleteBrandDetails(Guid brandId)
+        {
+            var result = await brandService.DeleteBrand(brandId);
+            if (result == false)
+            {
+                return new ServiceResult(false, "Failed to Delete Brand Details");
+            }
+            return new ServiceResult(true, "Brand details deleted successfully");
+        }
 
         //[HttpPost]
         //public async Task<IActionResult> UpdateBrands(BrandViewModel brandDto)
@@ -380,75 +449,14 @@ namespace Shopify.Web.Controllers
             return View(categoryView);
         }
 
-        public async Task<IActionResult> ProductDetails(Guid id)
+        public async Task<ServiceResult> DeleteCategoryDetails(Guid categoryId)
         {
-            var allBrands = await brandService.GetAllBrandsAsync();
-            var allCategories = await categoryService.GetAllCategoriesAsync();
-            var product = await productService.GetProductDetailsById(id);
-            var productView = new ProductViewModel()
+            var result = await categoryService.DeleteCategory(categoryId);
+            if (result == false)
             {
-                Id = id,
-                brands = allBrands.Where(b => b.IsActive == true),
-                categories = allCategories.Where(b => b.IsActive == true),
-                Name = product.Name,
-                Description = product.Description,
-                Sku = product.Sku,
-                IsFeatured = (bool)product.IsFeatured,
-                ShortDescription = product.ShortDescription,
-                BasePrice = product.BasePrice,
-                SellingPrice = product.SellingPrice,
-                CategoryId = product.CategoryId,
-                BrandId = product.BrandId,
-                UnitOfMeasure = product.UnitOfMeasure,
-            };
-
-            return View(productView);
-        }
-
-
-        public async Task<IActionResult>Details(Guid id)
-        {
-            var allBrands = await brandService.GetAllBrandsAsync();
-            var allCategories = await categoryService.GetAllCategoriesAsync();
-            var product = await productService.GetProductDetailsById(id);
-            var productView = new ProductViewModel()
-            {
-                Id = id,
-                brands = allBrands.Where(b => b.IsActive == true),
-                categories = allCategories.Where(b => b.IsActive == true),
-                Name = product.Name,
-                Description = product.Description,
-                Sku = product.Sku,
-                IsFeatured = (bool)product.IsFeatured,
-                ShortDescription = product.ShortDescription,
-                BasePrice = product.BasePrice,
-                SellingPrice = product.SellingPrice,
-                CategoryId = product.CategoryId,
-                BrandId = product.BrandId,
-                UnitOfMeasure = product.UnitOfMeasure,
-            };
-
-            return View(productView);
-        }
-
-
-        [HttpPost]
-        public async Task<ServiceResult> DeleteProduct(Guid id)
-        {
-            if (id == null)
-            {
-                return new ServiceResult(false, "Product Id is not Found");
+                return new ServiceResult(false, "Failed to Delete Category Details");
             }
-
-            bool isSuccess = await productService.DeleteProduct(id);
-            if (isSuccess)
-            {
-                return new ServiceResult(true, "Product deleted Successfully");
-            }
-            else
-            {
-                return new ServiceResult(false, "Product deletion failed");
-            }
+            return new ServiceResult(true, "Category details deleted successfully");
         }
 
     }

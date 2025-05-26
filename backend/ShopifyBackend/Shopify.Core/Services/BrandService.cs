@@ -48,5 +48,20 @@ namespace Shopify.Core.Services
                 return null;
             }
         }
+
+        public async Task<bool> DeleteBrand(Guid brandId)
+        {
+            try
+            {
+                var brand = await _unitOfWork.Brands.GetBrandById(brandId);
+                _unitOfWork.Brands.Remove(brand);
+                await _unitOfWork.SaveAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }

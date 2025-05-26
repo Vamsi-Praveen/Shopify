@@ -47,5 +47,20 @@ namespace Shopify.Core.Services
                 return null;
             }
         }
+
+        public async Task<bool> DeleteCategory(Guid categoryId)
+        {
+            try
+            {
+                var category = await _unitOfWork.Category.GetCategoryById(categoryId);
+                _unitOfWork.Category.Remove(category);
+                await _unitOfWork.SaveAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }

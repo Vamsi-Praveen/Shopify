@@ -10,8 +10,8 @@ namespace Shopify.Core.Domain.Services
     public interface ICategoryService
     {
        public Task<IEnumerable<Category>> GetAllCategoriesAsync();
-
        public Task<bool> CreateCategory(Category category);
        public Task<Category> GetCategoryDetailsById(Guid parsedCategoryId);
+       public Task<bool> DeleteCategory(Guid categoryId);
     }
 }
