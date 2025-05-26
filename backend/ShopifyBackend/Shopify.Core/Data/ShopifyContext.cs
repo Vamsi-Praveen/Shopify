@@ -100,7 +100,6 @@ public partial class ShopifyContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Addresses)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("addresses_user_id_fkey");
         });
 
@@ -171,6 +170,7 @@ public partial class ShopifyContext : DbContext
 
             entity.HasOne(d => d.ParentCategory).WithMany(p => p.InverseParentCategory)
                 .HasForeignKey(d => d.ParentCategoryId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("categories_parent_category_id_fkey");
         });
 
@@ -203,7 +203,6 @@ public partial class ShopifyContext : DbContext
 
             entity.HasOne(d => d.Product).WithOne(p => p.Inventory)
                 .HasForeignKey<Inventory>(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("inventory_product_id_fkey");
         });
 
@@ -238,7 +237,6 @@ public partial class ShopifyContext : DbContext
 
             entity.HasOne(d => d.Product).WithMany(p => p.Inventorytransactions)
                 .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("inventorytransactions_product_id_fkey");
         });
 
@@ -318,7 +316,6 @@ public partial class ShopifyContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("orders_user_id_fkey");
         });
 
@@ -353,12 +350,10 @@ public partial class ShopifyContext : DbContext
 
             entity.HasOne(d => d.Order).WithMany(p => p.Orderitems)
                 .HasForeignKey(d => d.OrderId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("orderitems_order_id_fkey");
 
             entity.HasOne(d => d.Product).WithMany(p => p.Orderitems)
                 .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("orderitems_product_id_fkey");
         });
 
@@ -397,7 +392,6 @@ public partial class ShopifyContext : DbContext
 
             entity.HasOne(d => d.Order).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.OrderId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("payments_order_id_fkey");
         });
 
@@ -488,7 +482,6 @@ public partial class ShopifyContext : DbContext
 
             entity.HasOne(d => d.Product).WithMany(p => p.Productimages)
                 .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("productimages_product_id_fkey");
         });
 
@@ -519,12 +512,10 @@ public partial class ShopifyContext : DbContext
 
             entity.HasOne(d => d.Product).WithMany(p => p.Productreviews)
                 .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("productreviews_product_id_fkey");
 
             entity.HasOne(d => d.User).WithMany(p => p.Productreviews)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("productreviews_user_id_fkey");
         });
 

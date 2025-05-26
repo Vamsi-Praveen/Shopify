@@ -11,5 +11,6 @@ namespace Shopify.Web.Models
         public string? Description { get; set; }
 
         public IFormFile? ImageFile { get; set; }
+        public string? ImageFileUrl { get; set; }
     }
 }

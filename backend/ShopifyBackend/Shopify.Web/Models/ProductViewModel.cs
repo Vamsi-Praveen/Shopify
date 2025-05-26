@@ -8,6 +8,8 @@ namespace Shopify.Web.Models
         
         public IEnumerable<Category> categories;
 
+        public Guid Id { get; set; }
+
         public string Name { get; set; } = null!;
 
         public string Sku { get; set; } = null!;

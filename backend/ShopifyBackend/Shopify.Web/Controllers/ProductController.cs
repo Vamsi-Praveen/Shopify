@@ -235,6 +235,73 @@ namespace Shopify.Web.Controllers
             return RedirectToAction("Brands", "Product");
         }
 
+        public async Task<IActionResult> BrandDetails(Guid id)
+        {
+            var brand = await brandService.GetBrandDetailsById(id);
+            var brandView = new BrandViewModel()
+            {
+                Name = brand.Name,
+                Description = brand.Description,
+                ThumbnailFileUrl = brand.LogoUrl,
+            };
+
+            return View(brandView);
+        }
+
+
+        //[HttpPost]
+        //public async Task<IActionResult> UpdateBrands(BrandViewModel brandDto)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        var brands = await brandService.GetAllBrandsAsync();
+        //        TempData["OpenModal"] = true;
+        //        return View(new BrandViewModel
+        //        {
+        //            Brands = brands
+        //        });
+        //    }
+
+        //    string imageUrl = null;
+        //    if (brandDto.ThumbnailFile != null)
+        //    {
+        //        imageUrl = await _blobService.UploadImageAsync(brandDto.ThumbnailFile);
+        //    }
+
+        //    if (brandDto.ThumbnailFile != null && imageUrl == null)
+        //    {
+        //        TempData["ModalType"] = "ERROR";
+        //        TempData["ModalTitle"] = "Creation Failed";
+        //        TempData["ModalMessage"] = "Could add image to our DB.";
+        //        return RedirectToAction("Brands", "Product");
+        //    }
+
+        //    Brand brand = new Brand()
+        //    {
+        //        Id = Guid.NewGuid(),
+        //        Name = brandDto.Name,
+        //        Description = brandDto.Description,
+        //        LogoUrl = imageUrl
+        //    };
+
+        //    bool isSuccess = await brandService.CreateBrand(brand);
+
+        //    if (isSuccess)
+        //    {
+        //        TempData["ModalType"] = "Success";
+        //        TempData["ModalTitle"] = "Brand Created!";
+        //        TempData["ModalMessage"] = $"Brand {brand.Name} has been created successfully.";
+        //    }
+        //    else
+        //    {
+        //        TempData["ModalType"] = "ERROR";
+        //        TempData["ModalTitle"] = "Creation Failed";
+        //        TempData["ModalMessage"] = "Could not create the user due to an unexpected error. Please check the details and try again, or contact support.";
+        //    }
+
+        //    return RedirectToAction("Brands", "Product");
+        //}
+
 
         // Categories
         public async Task<IActionResult> Categories()
@@ -300,13 +367,53 @@ namespace Shopify.Web.Controllers
             return RedirectToAction("Categories", "Product");
         }
 
-        public async Task<IActionResult> Details(Guid id)
+        public async Task<IActionResult> CategoryDetails(Guid id)
+        {
+            var category = await categoryService.GetCategoryDetailsById(id);
+            var categoryView = new CategoriesViewModel()
+            {
+                Name = category.Name,
+                Description = category.Description,
+                ImageFileUrl = category.ImageUrl,
+            };
+
+            return View(categoryView);
+        }
+
+        public async Task<IActionResult> ProductDetails(Guid id)
         {
             var allBrands = await brandService.GetAllBrandsAsync();
             var allCategories = await categoryService.GetAllCategoriesAsync();
             var product = await productService.GetProductDetailsById(id);
             var productView = new ProductViewModel()
             {
+                Id = id,
+                brands = allBrands.Where(b => b.IsActive == true),
+                categories = allCategories.Where(b => b.IsActive == true),
+                Name = product.Name,
+                Description = product.Description,
+                Sku = product.Sku,
+                IsFeatured = (bool)product.IsFeatured,
+                ShortDescription = product.ShortDescription,
+                BasePrice = product.BasePrice,
+                SellingPrice = product.SellingPrice,
+                CategoryId = product.CategoryId,
+                BrandId = product.BrandId,
+                UnitOfMeasure = product.UnitOfMeasure,
+            };
+
+            return View(productView);
+        }
+
+
+        public async Task<IActionResult>Details(Guid id)
+        {
+            var allBrands = await brandService.GetAllBrandsAsync();
+            var allCategories = await categoryService.GetAllCategoriesAsync();
+            var product = await productService.GetProductDetailsById(id);
+            var productView = new ProductViewModel()
+            {
+                Id = id,
                 brands = allBrands.Where(b => b.IsActive == true),
                 categories = allCategories.Where(b => b.IsActive == true),
                 Name = product.Name,

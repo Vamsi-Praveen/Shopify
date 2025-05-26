@@ -71,28 +71,28 @@ namespace Shopify.Core.Services
             try
             {
                 // Remove related product images and product review 
-                var productReviews = await _unitOfWork.ProductReviews.GetProductReviewsByProductId(productId);
-                foreach (var review in productReviews)
-                {
-                    _unitOfWork.ProductReviews.Remove(review);
-                }
+                //var productReviews = await _unitOfWork.ProductReviews.GetProductReviewsByProductId(productId);
+                //foreach (var review in productReviews)
+                //{
+                //    _unitOfWork.ProductReviews.Remove(review);
+                //}
 
 
-                var productImages = await _unitOfWork.ProductImages.GetProductImagesByProductId(productId);
-                var res = true;
-                foreach (var image in productImages)
-                {
-                    res = await _azureBlobService.DeleteImageAsync(image.ImageUrl);
-                    if(res== false)
-                    {
-                        _logger.LogError($"Unable to delete Product Image from DB - {image.ImageUrl}");
-                        return false;
-                    }
-                }
-                foreach (var review in productImages)
-                {
-                    _unitOfWork.ProductImages.Remove(review);
-                }
+                //var productImages = await _unitOfWork.ProductImages.GetProductImagesByProductId(productId);
+                //var res = true;
+                //foreach (var image in productImages)
+                //{
+                //    res = await _azureBlobService.DeleteImageAsync(image.ImageUrl);
+                //    if(res== false)
+                //    {
+                //        _logger.LogError($"Unable to delete Product Image from DB - {image.ImageUrl}");
+                //        return false;
+                //    }
+                //}
+                //foreach (var review in productImages)
+                //{
+                //    _unitOfWork.ProductImages.Remove(review);
+                //}
 
 
                 var product = await _unitOfWork.Product.GetProductById(productId);
