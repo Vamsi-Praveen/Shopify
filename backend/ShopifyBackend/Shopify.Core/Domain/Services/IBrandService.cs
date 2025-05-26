@@ -1,4 +1,6 @@
-﻿using Shopify.Core.Entities;
+﻿using Shopify.Core.Communication;
+using Shopify.Core.DTOs;
+using Shopify.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +15,6 @@ namespace Shopify.Core.Domain.Services
        public Task<bool> CreateBrand(Brand brand);
        public Task<Brand> GetBrandDetailsById(Guid parsedBrandId);
        public Task<bool> DeleteBrand(Guid brandId);
+       public Task<ServiceResult> UpdateBrand(BrandDTO brand);
     }
 }

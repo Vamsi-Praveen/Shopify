@@ -295,6 +295,40 @@ namespace Shopify.Web.Controllers
             return RedirectToAction("Brands", "Product");
         }
 
+        [HttpPost]
+        public async Task<ServiceResult> UpdateBrandDetails(BrandViewModel brandDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new ServiceResult(false, "Invalid Modal states");
+            }
+
+            string imageUrl = null;
+            if (brandDto.ThumbnailFile != null)
+            {
+                imageUrl = await _blobService.UploadImageAsync(brandDto.ThumbnailFile);
+            }
+
+            if (brandDto.ThumbnailFile != null && imageUrl == null)
+            {
+                return new ServiceResult(false, "Failed to add Image in DB");
+            }
+
+            BrandDTO brand = new BrandDTO()
+            {
+                Id = brandDto.Id,
+                Name = brandDto.Name,
+                Description = brandDto.Description,
+                LogoUrl = imageUrl,
+                IsActive = brandDto.IsActive
+            };
+            brand.UpdatedAt = DateTime.Now;
+
+            var result = await brandService.UpdateBrand(brand);
+
+            return result;
+        }
+
         public async Task<IActionResult> BrandDetails(Guid id)
         {
             var brand = await brandService.GetBrandDetailsById(id);
