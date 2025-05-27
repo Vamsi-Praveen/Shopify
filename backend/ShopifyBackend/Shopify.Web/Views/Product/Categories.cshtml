@@ -19,6 +19,34 @@
             openCategoryModal();
         </script>
     }
+    <script>
+        function deleteCategory(id){
+           openModal("Delete","Confirm Delete","Are you sure to delete the brand",()=>deleteCategoryDetails(id));
+        }
+
+        async function deleteCategoryDetails(id){
+            try {
+                 const response = await fetch(`/Product/DeleteCategoryDetails?categoryId=${encodeURIComponent(id)}`, {
+                 method: "POST"
+             });
+
+             if (!response.ok) throw new Error("Network error");
+
+             const res = await response.json();
+
+             if (res.success) {
+                 openModal("Success", "Category Deleted!", res.message);
+                 setTimeout(() => {
+                     window.location.href = "/Product/Categories";
+                 }, 2000);
+             } else {
+                 openModal("Error", "Category Deletion Failed!", res.message);
+             }
+           } catch (error) {
+                 openModal("Error", "Unexpected Error", error.message);
+             }
+        }
+    </script>
 }
 
 <div class="p-4 space-y-6">
@@ -109,7 +137,7 @@
                                         <i class="ph-bold ph-pencil"></i>
                                         <span>Edit</span>
                                     </button>
-                                    <button class="flex items-center gap-1 font-semibold text-red-400 cursor-pointer hover:bg-red-100 px-2 py-1 rounded-sm">
+                                    <button class="flex items-center gap-1 font-semibold text-red-400 cursor-pointer hover:bg-red-100 px-2 py-1 rounded-sm" onclick="deleteCategory('@category.Id')">
                                         <i class="ph-bold ph-trash"></i>
                                         <span>Delete</span>
                                     </button>

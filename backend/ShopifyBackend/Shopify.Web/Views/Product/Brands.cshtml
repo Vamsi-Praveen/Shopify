@@ -19,6 +19,35 @@
             openBrandModal();
         </script>
     }
+
+    <script>
+        function deleteBrand(id){
+           openModal("Delete","Confirm Delete","Are you sure to delete the brand",()=>deleteBrandDetails(id));
+        }
+
+        async function deleteBrandDetails(id){
+            try {
+                 const response = await fetch(`/Product/DeleteBrandDetails?brandId=${encodeURIComponent(id)}`, {
+                 method: "POST"
+             });
+
+             if (!response.ok) throw new Error("Network error");
+
+             const res = await response.json();
+
+             if (res.success) {
+                 openModal("Success", "Brand Deleted!", res.message);
+                 setTimeout(() => {
+                     window.location.href = "/Product/Brands";
+                 }, 2000);
+             } else {
+                 openModal("Error", "Brand Deletion Failed!", res.message);
+             }
+           } catch (error) {
+                 openModal("Error", "Unexpected Error", error.message);
+             }
+        }
+    </script>
 }
 
 <div class="p-4 space-y-6">
@@ -109,10 +138,10 @@
                                     <i class="ph-bold ph-pencil"></i>
                                     <span>Edit</span>
                                </button>
-                                    <button class="flex items-center gap-1 font-semibold text-red-400 cursor-pointer hover:bg-red-100 px-2 py-1 rounded-sm">
+                               <button class="flex items-center gap-1 font-semibold text-red-400 cursor-pointer hover:bg-red-100 px-2 py-1 rounded-sm" onclick="deleteBrand('@brand.Id')">
                                     <i class="ph-bold ph-trash"></i>
                                     <span>Delete</span>
-                                </button>
+                               </button>
                                </div>
                             </td>
                         </tr>

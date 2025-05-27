@@ -136,7 +136,7 @@
                     const innerDiv = document.createElement("div");
                     innerDiv.className = "absolute rounded-full bg-gray-500 w-5 h-5 top-2 right-2 flex items-center justify-center cursor-pointer";
                     innerDiv.addEventListener("click", () => {
-                        deleteImage(img.id);
+                        deleteImg(img.id);
                     });
                     innerDiv.innerHTML = "<i class='ph-bold ph-x text-white text-sm'></i>";
                     imgEl.src = img.imageURL;
@@ -197,6 +197,10 @@
                 openModal("error", "Image Delete Failed", `${result.message}`);
             }
         }
+    }
+
+    async function deleteImg(imageId){
+        openModal("Delete","Image Delete","Are you sure, want to delete the product image",()=>deleteImage(imageId))
     }
 
     function closeAddImageModal() {

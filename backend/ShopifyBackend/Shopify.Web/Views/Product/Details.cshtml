@@ -35,9 +35,13 @@
              }
          });
 
-           async function deleteProduct(id){
+        function deleteProduct(id){
+           openModal("Delete","Confirm Delete","Are you sure to delete the product",()=>deleteP(id));
+        }
+
+        async function deleteP(id){
              try {
-                 const response = await fetch(`/Product/DeleteProduct/${encodeURIComponent(id)}`, {
+                 const response = await fetch(`/Product/DeleteProductDetails?productId=${encodeURIComponent(id)}`, {
                  method: "POST"
              });
 

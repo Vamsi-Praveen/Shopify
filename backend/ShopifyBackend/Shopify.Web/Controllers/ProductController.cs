@@ -138,6 +138,7 @@ namespace Shopify.Web.Controllers
             return View(productView);
         }
 
+        [HttpPost]
         public async Task<ServiceResult> DeleteProductDetails(Guid productId)
         {
             var result = await productService.DeleteProduct(productId);
@@ -342,6 +343,7 @@ namespace Shopify.Web.Controllers
             return View(brandView);
         }
 
+        [HttpPost]
         public async Task<ServiceResult> DeleteBrandDetails(Guid brandId)
         {
             var result = await brandService.DeleteBrand(brandId);
@@ -482,7 +484,7 @@ namespace Shopify.Web.Controllers
 
             return View(categoryView);
         }
-
+        [HttpPost]
         public async Task<ServiceResult> DeleteCategoryDetails(Guid categoryId)
         {
             var result = await categoryService.DeleteCategory(categoryId);
